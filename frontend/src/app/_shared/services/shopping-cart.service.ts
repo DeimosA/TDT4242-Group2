@@ -54,7 +54,7 @@ export class ShoppingCartService {
 
   public removeItem(productId : number){
     this.cart = this.cart.filter((e) => e.productId != productId);
-    this.cartSub.next(this.cart.slice());
+    this.updateAndNotify();
   }
 
   public updateItem(newItem : ShoppingCartItem){
