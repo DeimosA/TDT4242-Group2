@@ -5,18 +5,17 @@
       <div class="card-content">
         <span class="card-title">Search and filter</span>
 
-        <form #searchForm="ngForm">
+        <form [formGroup]="formGroup">
           <div class="input-field row">
             <input
               type="text" id="search" name="search"
-              [(ngModel)]="curr_search"
-              #search="ngModel"
+              formControlName="search"
             />
             <label for="search" class="black-text">search</label>
           </div>
           <div class="row">
             <label>sort by</label>
-            <select [(ngModel)]="curr_sort" name="sort" materialize="material_select">
+            <select formControlName="sort" name="sort" materialize="material_select">
               <option value="name ASC" selected>Name</option>
               <option value="manufacturer ASC">Manufacturer</option>
               <option value="price DESC">Expensive</option>
@@ -25,16 +24,14 @@
           </div>
           <div class="input-field row">
             <input
-              type="number" id="price" name="price"
-              [(ngModel)]="curr_price"
-              #search="ngModel"
+              formControlName="minPrice"
+              name="minPrice"
+              type="number"
+              id="minPrice"
               min="0"
             />
-            <label for="price" class="black-text">min price</label>
+            <label for="minPrice" class="black-text">min price</label>
           </div>
-          <button type="submit" (click)="search_Cb()"
-                  class="btn-flat green white-text waves-effect waves-light right register-button">Search</button>
-
         </form>
 
       </div>

@@ -21,9 +21,11 @@ export class ProductContainerComponent implements OnInit {
   private loading: boolean;
 
   // vars to handle getProducts
-  private searchTerm = "";
-  private sort = "name ASC";
-  private minPrice = 0;
+  private searchFormFields = {
+    search: "",
+    sort: "name ASC",
+    minPrice: 0
+  }
 
   constructor(private prodService: ProductsService,) { }
 
@@ -40,9 +42,9 @@ export class ProductContainerComponent implements OnInit {
     this.prodService.searchProducts(
       this.product_list_limit,
       this.product_list_page * this.product_list_limit,
-      this.searchTerm,
-      this.sort,
-      this.minPrice
+      this.searchFormFields.search,
+      this.searchFormFields.sort,
+      this.searchFormFields.minPrice
     ).subscribe(products => {
       this.products = products;
       this.loading = false;
@@ -60,9 +62,9 @@ export class ProductContainerComponent implements OnInit {
     this.prodService.searchProducts(
       this.product_list_limit,
       this.product_list_page * this.product_list_limit,
-      this.searchTerm,
-      this.sort,
-      this.minPrice
+      this.searchFormFields.search,
+      this.searchFormFields.sort,
+      this.searchFormFields.minPrice
     ).subscribe(products => {
       this.products = this.products.concat(products);
       this.loading = false;
@@ -75,9 +77,7 @@ export class ProductContainerComponent implements OnInit {
   updateSearch(searchform: SearchForm): void {
     this.loading = true;
     this.product_list_page = 0;
-    this.searchTerm = searchform.curr_search;
-    this.sort = searchform.curr_sort;
-    this.minPrice = searchform.curr_price;
+    this.searchFormFields = searchform;
     this.getProducts();
   }
 
