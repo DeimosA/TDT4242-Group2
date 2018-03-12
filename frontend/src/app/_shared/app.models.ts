@@ -70,9 +70,9 @@ class ShoppingCartItem{
 }
 
 interface SearchForm {
-  curr_search: string,
-  curr_price: number,
-  curr_sort: string,
+  search: string,
+  minPrice: number,
+  sort: string,
 }
 
 export {UserModel, ProductModel, ShoppingCartItem, SearchForm}
