@@ -10,7 +10,7 @@
     (scrolled)= "nextPageCb.emit()"
     >
 
-    <li *ngFor="let product of productList" class="collection-item">
+    <li *ngFor="let product of productList" class="collection-item product-list-box">
       <a [routerLink]="['/product', product.id]" class="product-list-item black-text">
         <div>
           <h3>{{product.name}}</h3>
