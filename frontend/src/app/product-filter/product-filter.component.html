@@ -1,20 +1,21 @@
 
-<div class="row">
-  <div class="col s12">
-    <div class="card indigo lighten-5">
+<div class="row product-filter">
+  <div class="col">
+    <div class="card">
       <div class="card-content">
-        <span class="card-title">Search and filter</span>
-
         <form [formGroup]="formGroup">
-          <div class="input-field row">
-            <input
-              type="text" id="search" name="search"
-              formControlName="search"
-            />
-            <label for="search" class="black-text">search</label>
+          <div class="section">
+            <label> Search </label>
+            <div class="input-field">
+              <input
+                type="text" formControlName="search"
+                id="search" name="search" />
+              <label for="search" class="black-text"> Search </label>
+            </div>
           </div>
-          <div class="row">
-            <label>sort by</label>
+
+          <div class="section">
+            <label> Sort by </label>
             <select formControlName="sort" name="sort" materialize="material_select">
               <option value="name ASC" selected>Name</option>
               <option value="manufacturer ASC"> Manufacturer </option>
@@ -22,18 +23,18 @@
               <option value="price ASC"> Price low-high </option>
             </select>
           </div>
-          <div class="input-field row">
-            <input
-              formControlName="minPrice"
-              name="minPrice"
-              type="number"
-              id="minPrice"
-              min="0"
-            />
-            <label for="minPrice" class="black-text">min price</label>
+
+          <div class="section">
+            <label> Price </label>
+            <p> {{ formGroup.value.minPrice }} - 2000 </p>
+            <p class="range-field">
+              <input 
+                type="range" formControlName="minPrice" 
+                id="minPrice" name="minPrice"
+                min="0" max="2000" />
+            </p>
           </div>
         </form>
-
       </div>
     </div>
   </div>
