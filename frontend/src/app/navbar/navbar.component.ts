@@ -60,7 +60,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
 
     this.shoppingCartSub = this.shoppingCart.getShoppingCart().subscribe((cart) => {
-      this.itemsInCart = cart.length;
+      this.itemsInCart = cart.reduce((accumulator, current) => { return accumulator + current.quantity }, 0);
     });
 
     this.intervalId = window.setInterval(() => {
