@@ -1,4 +1,25 @@
 
+.product-details {
+  padding-top: 30px;
+}
+
 .old-price {
   text-decoration: line-through;
+}
+
+.image-wrapper {
+  overflow: hidden !important;
+  display: inline-block;
+}
+
+.image-wrapper img {
+  transition: transform 1s;
+}
+
+.image-wrapper:hover img {
+  transform: scale(1.2);
+}
+
+h3 {
+  margin: 0px;
 }
