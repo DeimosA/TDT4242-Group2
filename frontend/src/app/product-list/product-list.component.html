@@ -1,4 +1,8 @@
 <div class="row">
+  <div *ngIf="productList?.length <= 0" class="card-panel indigo lighten-5">
+    <p> We could not find any products with that search. Try again with something different. </p>
+  </div>
+  
   <ul class="collection"
     infinite-scroll
     [infiniteScrollDistance]="2"
