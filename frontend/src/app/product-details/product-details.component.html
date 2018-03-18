@@ -1,17 +1,22 @@
 
 <div *ngIf="product" class="row product-details">
-  <div class="col m10">
-    <div class="card medium horizontal indigo lighten-5">
+
+  <div *ngIf="user?.isAdmin" class="card-panel red lighten-3 admin-panel">
+    <h3>You are logged in as admin:</h3>
+    <a [routerLink]="['/products/edit', product.id]" class="btn waves-effect">Edit this product</a>
+  </div>
+
+    <div class="card large horizontal indigo lighten-5">
       <div class="card-image image-wrapper">
         <img *ngIf="!product.image" src="http://woodenwallsproject.com/wp-content/uploads/2017/01/product-placeholder.jpg">
-        <img *ngIf="!product.image" src={{product.image}}>
+        <img *ngIf="product.image" src={{product.image}}>
       </div>
       <div class="card-stacked">
         <div class="card-content black-text">
           <h2>{{product.name}}</h2>
 
           <div class="row">
-            <p><em>{{product.manufacturer}}</em></p>
+            <p>Manufactured by:<br><em>{{product.manufacturer}}</em></p>
             <p>{{product.description}}</p>
           </div>
 
@@ -33,10 +38,8 @@
 
           <div class="card-action">
             <button type="button" class="waves-effect waves-light btn" (click)="addToCart(product.id)">Add to cart</button>
-            <a *ngIf="user && user.isAdmin" [routerLink]="['/products/edit', product.id]" class="">Edit this product</a>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </div>

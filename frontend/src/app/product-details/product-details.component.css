@@ -20,6 +20,16 @@
   transform: scale(1.2);
 }
 
+.admin-panel {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+}
+
 h3 {
-  margin: 0px;
+  margin: 0;
+}
+
+p {
+  margin: 15px 0 15px 0 !important;
 }
