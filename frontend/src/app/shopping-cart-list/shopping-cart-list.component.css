@@ -1,0 +1,9 @@
+
+.shopping-cart-item {
+  padding: 20px;
+  margin: 0px;
+}
+
+.shopping-cart-item:hover {
+  background-color: #e8eaf6;
+}

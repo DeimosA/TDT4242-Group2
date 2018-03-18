@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
 import { ShoppingCartItem, ProductModel } from '../_shared/app.models';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 import { Subject } from 'rxjs/Subject';
@@ -21,33 +20,44 @@ export class ShoppingCartListComponent implements OnChanges {
   @Output("itemDelete")
   private itemDelEmitter = new EventEmitter<ShoppingCartItem>(); 
 
-
   constructor() { }
 
   ngOnChanges() {
-    for(let item of this.cartList){
-      if(!(item.productId in this.products)){
-        item.product.subscribe((product : ProductModel) => {
-          this.products[item.productId] = product;
-        })
-      }
-    }
+    this.fillProducts()
   }
 
-  private updateQty(item : ShoppingCartItem,diff : number){
+  private fillProducts():void {
+    this.cartList
+      .filter(item => !(item.productId in this.products))
+      .forEach(item => item.product.subscribe((product : ProductModel) => this.products[item.productId] = product ))
+  }
+
+  private updateQty(event, item : ShoppingCartItem, diff : number) {
     item.quantity += diff;
     this.itemQtyEmitter.emit(item);
+    event.preventDefault();
+    event.stopPropagation();
   }
 
-  private deleteItem(item : ShoppingCartItem){
+  private deleteItem(event, item : ShoppingCartItem) {
     this.itemDelEmitter.emit(item);
+    event.preventDefault();
+    event.stopPropagation();
   }
 
-  private productLoaded(item : ShoppingCartItem){
+  private productLoaded(item : ShoppingCartItem) {
     return item.productId in this.products;
   }
 
-  private product(item : ShoppingCartItem){
+  private product(item : ShoppingCartItem) {
     return this.products[item.productId];
+  }
+
+  private totalPrice(): number {
+    return; // todo
+  }
+
+  private checkout() {
+    return; // todo
   }
 }
