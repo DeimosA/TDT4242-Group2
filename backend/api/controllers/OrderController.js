@@ -22,10 +22,11 @@ module.exports = {
 
     for (let product of req.body) {
       // Check valid product format and store key: value for easy quantity lookup
-      if (product.hasOwnProperty('productId') && product.hasOwnProperty('quantity')) {
+      // Also check that quantity is positive
+      if (product.hasOwnProperty('productId') && parseInt(product.quantity) > 0) {
         orderQuantity[product.productId] = product.quantity;
 
-      } else return res.badRequest({error: 'Some objects in your array do not have a productId and quantity'});
+      } else return res.badRequest({error: 'Some objects in your array do not have a productId and/or positive quantity'});
     }
 
     // Check if logged in user exists
@@ -34,7 +35,7 @@ module.exports = {
       if (!user) return res.unauthorized();
 
       // Fetch product details from DB
-      // TODO don't allow buying unlisted products
+      // TODO don't allow buying unlisted products (not implemented in frontend)
       Product.find({id: Object.keys(orderQuantity)}).exec(function (err, products) {
         if (err) return res.negotiate(err);
         if (!products) return res.badRequest({error: 'None of the products you ordered exist (we think)'});
