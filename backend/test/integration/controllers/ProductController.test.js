@@ -58,7 +58,7 @@ describe('ProductController', () => {
     describe('Normal', () => {
 
       it('should fail create new product', async () => {
-        const newProduct = { name: 'new product', description: 'last', price: 99 }
+        const newProduct = { name: 'new product', description: 'last', price: 99, manufacturer: 'jall' }
         await post(api.create, newProduct, code.unauthorized).then((res) => {
           should.exist(res.body) // product
         })
@@ -73,7 +73,7 @@ describe('ProductController', () => {
       })
 
       it('should create new product', async () => {
-        const newProduct = { name: 'new product', description: 'last', price: 99 }
+        const newProduct = { name: 'new product', description: 'last', price: 99, manufacturer: 'jall' }
         await post(api.create, newProduct, code.created, cookie).then((res) => {
           should.exist(res.body.id) // product
           product = res.body
