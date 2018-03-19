@@ -1,2 +1,17 @@
 
-<app-shopping-cart-list [items]="items" (itemDelete)="deleteItem($event)" (itemChange)="changeItem($event)"></app-shopping-cart-list>
+<h2>Your shopping cart</h2>
+
+<app-shopping-cart-list
+  [items]="items"
+  (itemDelete)="deleteItem($event)"
+  (itemChange)="changeItem($event)">
+</app-shopping-cart-list>
+
+<div class="flow-text cart-actions">
+  <button type="button" (click)="clearCart()" class="waves-effect waves-light btn">Clear cart</button>
+
+  <div>
+    Total price: kr {{ totalPrice() }}
+  </div>
+  <button type="button" (click)="checkout()" class="waves-effect waves-light btn">Checkout cart</button>
+</div>

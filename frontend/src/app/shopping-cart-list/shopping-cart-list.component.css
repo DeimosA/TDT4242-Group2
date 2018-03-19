@@ -1,7 +1,12 @@
 
 .shopping-cart-item {
-  padding: 20px;
-  margin: 0px;
+  padding: 10px;
+  margin: 0;
+}
+
+.shopping-cart-item a {
+  display: block;
+  padding: 15px;
 }
 
 .shopping-cart-item:hover {

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { ShoppingCartService } from '../_shared/services/shopping-cart.service';
 import { ShoppingCartItem } from '../_shared/app.models';
-import { Subscription } from 'rxjs/Subscription';
+
 
 @Component({
   selector: 'app-shopping-cart',
@@ -31,6 +32,18 @@ export class ShoppingCartComponent implements OnInit {
 
   private changeItem(item : ShoppingCartItem){
     this.shoppingCart.updateItem(item);
+  }
+
+  private totalPrice(): number {
+    return 0; // todo
+  }
+
+  private checkout() {
+    return; // todo
+  }
+
+  private clearCart() {
+    this.items.forEach(item => this.deleteItem(item));
   }
 
 }

@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+
 import { ShoppingCartItem, ProductModel } from '../_shared/app.models';
-import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
-import { Subject } from 'rxjs/Subject';
+
 
 @Component({
   selector: 'app-shopping-cart-list',
@@ -10,15 +10,16 @@ import { Subject } from 'rxjs/Subject';
 })
 export class ShoppingCartListComponent implements OnChanges {
 
+  private products : Map<number, ProductModel> = new Map<number, ProductModel>();
+
   @Input("items")
   private cartList : Array<ShoppingCartItem> = [];
-  private products : Map<number, ProductModel> = new Map<number, ProductModel>();
-  
+
   @Output("itemChange")
   private itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
 
   @Output("itemDelete")
-  private itemDelEmitter = new EventEmitter<ShoppingCartItem>(); 
+  private itemDelEmitter = new EventEmitter<ShoppingCartItem>();
 
   constructor() { }
 
@@ -29,7 +30,9 @@ export class ShoppingCartListComponent implements OnChanges {
   private fillProducts():void {
     this.cartList
       .filter(item => !(item.productId in this.products))
-      .forEach(item => item.product.subscribe((product : ProductModel) => this.products[item.productId] = product ))
+      .forEach(item => item.product.subscribe(
+        (product : ProductModel) => this.products[item.productId] = product )
+      );
   }
 
   private updateQty(event, item : ShoppingCartItem, diff : number) {
@@ -53,11 +56,4 @@ export class ShoppingCartListComponent implements OnChanges {
     return this.products[item.productId];
   }
 
-  private totalPrice(): number {
-    return; // todo
-  }
-
-  private checkout() {
-    return; // todo
-  }
 }

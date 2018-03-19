@@ -1,34 +1,48 @@
 
 <div class="row">
-  <ul class="collection flow-text">
+
+  <div *ngIf="cartList?.length <= 0" class="card-panel indigo lighten-5 flow-text">
+    <p> Your shopping cart is empty. Go buy something! </p>
+  </div>
+
+  <ul *ngIf="cartList?.length > 0" class="collection flow-text">
+
     <li *ngFor="let item of cartList" class="collection-item shopping-cart-item">
       <a [routerLink]="['/product', item._prodId]" class="black-text">
         <div *ngIf="productLoaded(item)" class="valign-wrapper">
-          <div class="col s">
-            <button (click)="deleteItem($event, item)" class="btn-floating waves-effect"><i class="material-icons">delete</i></button> 
-          </div>
-          <div class="col s3">
+
+          <div class="col s6">
             {{ product(item).name }}
           </div>
+
           <div class="col s3">
-            <button (click)="updateQty($event, item, 1)" class="btn-floating waves-effect"><i class="material-icons">add</i></button> 
+            <button type="button" (click)="updateQty($event, item, -1)" class="btn-floating waves-effect">
+              <i class="material-icons">remove</i>
+            </button>
             x{{ item.quantity }}
-            <button (click)="updateQty($event, item, -1)" class="btn-floating waves-effect"><i class="material-icons">remove</i></button>
+            <button type="button" (click)="updateQty($event, item, 1)" class="btn-floating waves-effect">
+              <i class="material-icons">add</i>
+            </button>
           </div>
+
           <div class="col s2">
-             kr {{ product(item).price }}
+             kr {{ product(item).price.toFixed(2) }}
           </div>
+
+          <div class="col">
+            <button type="button" (click)="deleteItem($event, item)" class="btn-floating waves-effect">
+              <i class="material-icons">delete</i>
+            </button>
+          </div>
+
         </div>
+
         <div *ngIf="!productLoaded(item)" class="progress">
           <div class="indeterminate"></div>
         </div>
       </a>
     </li>
+
   </ul>
-  <div class="col s3 offset-s9 flow-text">
-    Total: kr {{ totalPrice() }}
-  </div>
-  <div class="col s3 offset-s9 flow-text">
-    <button (click)="checkout()" type="button" class="waves-effect waves-light btn">Checkout</button>
-  </div>
+
 </div>
