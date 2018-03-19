@@ -105,14 +105,15 @@ module.exports = {
    */
   confirm: function (req, res) {
     Order.findOne(req.params.id).exec(function (err, order) {
-      if (err) return res.negotiate(err);
-      if (!order) return res.notFound({error: 'Order not found'});
-      if (order.user !== req.session.userId)
+      if (err) { return res.negotiate(err); }
+      if (!order) { return res.notFound({error: 'Order not found'}); }
+      if (order.user !== req.session.userId) {
         return res.forbidden({error: 'You are not permitted to perform this action'});
+      }
 
       Order.update(order.id, {user_confirmed: true}).exec(function (err, order) {
-        if (err) return res.negotiate(err);
-        if (!order || order.length < 1) return res.notFound({error: 'Order not found'});
+        if (err) { return res.negotiate(err); }
+        if (!order || order.length < 1) { return res.notFound({error: 'Order not found'}); }
 
         return res.json(order);
       });
@@ -124,16 +125,18 @@ module.exports = {
    */
   dismiss: function (req, res) {
     Order.findOne(req.params.id).exec(function (err, order) {
-      if (err) return res.negotiate(err);
-      if (!order) return res.notFound({error: 'Order not found'});
-      if (order.user !== req.session.userId)
+      if (err) { return res.negotiate(err); }
+      if (!order) { return res.notFound({error: 'Order not found'}); }
+      if (order.user !== req.session.userId) {
         return res.forbidden({error: 'You are not permitted to perform this action'});
-      if (order.user_confirmed && order.status !== 'PENDING')
+      }
+      if (order.user_confirmed && order.status !== 'PENDING') {
         return res.badRequest({error: 'Can not dismiss an accepted order'});
+      }
 
       Order.destroy(order.id).exec(function (err, deletedOrder) {
-        if (err) return res.negotiate(err);
-        if (!deletedOrder || deletedOrder.length < 1) return res.notFound({error: 'Order not found'});
+        if (err) { return res.negotiate(err); }
+        if (!deletedOrder || deletedOrder.length < 1) { return res.notFound({error: 'Order not found'}); }
 
         return res.json(deletedOrder);
       });
