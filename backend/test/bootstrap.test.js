@@ -34,8 +34,8 @@ const populate = () => {
   return new Promise(async (resolve, reject) => {
     await User.create({ email: 'test@test.com', password: 'test123test' })
     await User.create({ email: 'anothertest@test.com', password: 'test123test' })
-    await Product.create({ name: 'product1', description: 'first', price: 10, })
-    await Product.create({ name: 'product2', description: 'second', price: 20, })
+    await Product.create({ name: 'product1', description: 'first', price: 10, manufacturer: 'jall' })
+    await Product.create({ name: 'product2', description: 'second', price: 20, manufacturer: 'jall' })
     resolve()
   })
 }
