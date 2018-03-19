@@ -3,6 +3,7 @@
     <div class="card">
       <div class="card-content">
         <form [formGroup]="formGroup">
+
           <div class="section">
             <label> Search </label>
             <div class="input-field">
@@ -18,13 +19,13 @@
             <select formControlName="sort" name="sort" materialize="material_select">
               <option value="name ASC" selected>Name</option>
               <option value="manufacturer ASC"> Manufacturer </option>
-              <option value="price DESC"> Price high-low </option>
-              <option value="price ASC"> Price low-high </option>
+              <option value="price ASC"> Price: low -&gt; high </option>
+              <option value="price DESC"> Price: high -&gt; low </option>
             </select>
           </div>
 
           <div class="section">
-            <label> Price </label>
+            <label> Minimum price </label>
             <p> {{ formGroup.value.minPrice }} - 2000 </p>
             <p class="range-field">
               <input
@@ -33,6 +34,20 @@
                 min="0" max="2000" />
             </p>
           </div>
+
+          <div class="section">
+            <label> Maximum price </label>
+            <div class="input-field">
+              <input
+                formControlName="maxPrice"
+                name="maxPrice"
+                type="number"
+                id="maxPrice"
+                min="0"
+              />
+            </div>
+          </div>
+
         </form>
       </div>
     </div>

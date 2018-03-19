@@ -15,7 +15,8 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
   private formGroup : FormGroup = new FormGroup({
     search: new FormControl(''),
     sort: new FormControl('name ASC'),
-    minPrice: new FormControl(0)
+    minPrice: new FormControl(0),
+    maxPrice: new FormControl(Infinity)
   });
 
   private formSubscription : Subscription;
