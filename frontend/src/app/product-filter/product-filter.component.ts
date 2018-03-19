@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { DOCUMENT } from "@angular/platform-browser";
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
+
 import { SearchForm } from '../_shared/app.models';
 
 @Component({
@@ -22,7 +22,7 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
 
   @Output()
   private search_form = new EventEmitter<SearchForm>();
-  
+
   constructor() { }
 
   ngOnInit() {

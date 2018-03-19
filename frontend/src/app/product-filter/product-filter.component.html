@@ -1,6 +1,5 @@
 
 <div class="row product-filter">
-  <div class="col">
     <div class="card">
       <div class="card-content">
         <form [formGroup]="formGroup">
@@ -28,8 +27,8 @@
             <label> Price </label>
             <p> {{ formGroup.value.minPrice }} - 2000 </p>
             <p class="range-field">
-              <input 
-                type="range" formControlName="minPrice" 
+              <input
+                type="range" formControlName="minPrice"
                 id="minPrice" name="minPrice"
                 min="0" max="2000" />
             </p>
@@ -37,5 +36,4 @@
         </form>
       </div>
     </div>
-  </div>
 </div>
