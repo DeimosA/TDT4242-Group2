@@ -25,18 +25,28 @@
           </div>
 
           <div class="section">
-            <label> Minimum price </label>
-            <p> {{ formGroup.value.minPrice }} - 2000 </p>
-            <p class="range-field">
+            <label for="minPrice"> Minimum price </label>
+            <!--<p> {{ formGroup.value.minPrice }} - 2000 </p>-->
+            <!--<p class="range-field">-->
+              <!--<input-->
+                <!--type="range" formControlName="minPrice"-->
+                <!--id="minPrice" name="minPrice"-->
+                <!--min="0" max="2000" />-->
+            <!--</p>-->
+            <div class="input-field">
               <input
-                type="range" formControlName="minPrice"
-                id="minPrice" name="minPrice"
-                min="0" max="2000" />
-            </p>
+                formControlName="minPrice"
+                name="minPrice"
+                type="number"
+                id="minPrice"
+                min="0"
+                class="validate"
+              />
+            </div>
           </div>
 
           <div class="section">
-            <label> Maximum price </label>
+            <label for="maxPrice"> Maximum price </label>
             <div class="input-field">
               <input
                 formControlName="maxPrice"
@@ -44,9 +54,13 @@
                 type="number"
                 id="maxPrice"
                 min="0"
+                class="validate"
               />
             </div>
           </div>
+
+
+          <button type="button" (click)="clearFilter()" class="waves-effect waves-light btn">Clear</button>
 
         </form>
       </div>
