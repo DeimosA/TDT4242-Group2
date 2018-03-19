@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { trigger, state, style, transition, animate} from '@angular/animations';
+import { trigger, state, style, transition, animate, sequence } from '@angular/animations';
 
 import { UserModel } from '../_shared/app.models';
 import { UserAuthService } from "../_shared/services/user-auth.service";
@@ -19,6 +19,15 @@ import { ShoppingCartService } from "../_shared/services/shopping-cart.service";
       ]),
       transition(':leave', [
         animate('500ms ease-in-out', style({transform: 'translateY(-100%)'}))
+      ])
+    ]),
+    trigger('cartItemCountChange', [
+      transition('* => *', [
+        animate('50ms ease-in-out', style({transform: 'rotate(5deg)'})),
+        animate('50ms ease-in-out', style({transform: 'rotate(-10deg)'})),
+        animate('50ms ease-in-out', style({transform: 'rotate(10deg)'})),
+        animate('50ms ease-in-out', style({transform: 'rotate(-10deg)'})),
+        animate('50ms ease-in-out', style({transform: 'rotate(5deg)'})),
       ])
     ]),
   ],

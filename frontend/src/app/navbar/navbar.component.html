@@ -25,7 +25,11 @@
         <li class="waves-effect"
           [routerLinkActive]="['active']">
           <a routerLink="/cart"> Shopping cart
-            <span *ngIf="itemsInCart > 0" data-badge-caption="items" class="deep-orange darken-3 new badge">{{itemsInCart}}</span>
+            <span *ngIf="itemsInCart > 0"
+                  data-badge-caption="items"
+                  [@cartItemCountChange]="itemsInCart"
+                  class="deep-orange darken-3 new badge item-count"
+            >{{itemsInCart}}</span>
           </a>
         </li>
         <li *ngIf="!user"
