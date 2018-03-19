@@ -59,7 +59,7 @@ module.exports = {
    * Give a user admin privileges
    */
   makeAdmin: function (req, res) {
-    User.update(parseInt(req.params.id), {isAdmin: true}).exec(function (err, user) {
+    User.update(req.params.id, {isAdmin: true}).exec(function (err, user) {
       if (err) return res.negotiate(err);
       if (!user || user.length < 1) return res.notFound({error: 'User not found'});
       return res.json(user);
@@ -70,7 +70,7 @@ module.exports = {
    * Remove a users admin privileges
    */
   removeAdmin: function (req, res) {
-    User.update(parseInt(req.params.id), {isAdmin: false}).exec(function (err, user) {
+    User.update(req.params.id, {isAdmin: false}).exec(function (err, user) {
       if (err) return res.negotiate(err);
       if (!user || user.length < 1) return res.notFound({error: 'User not found'});
       return res.json(user);
