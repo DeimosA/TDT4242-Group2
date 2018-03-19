@@ -5,28 +5,55 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+const a = test => {
+  return new Promise(res => {
+    res(test)
+  })
+}
+
+const validateData = (data) => {
+  return new Promise((resolve, reject)) => {
+
+    if (!data instanceof Array || data.length === 0) {
+      reject('Your order is in invalid format')
+    }
+
+    data.forEach((item) => {
+      if (!item.productId && !item.quantity) {
+        reject('Your order is in invalid format')
+      }
+    })
+
+    resolve(data)
+  })
+}
+
 module.exports = {
 
   /**
    * Override default create method
    */
   create: function (req, res) {
-    // The body should contain an array of objects with productId and quantity
-    if (!req.body instanceof Array)
-      return res.badRequest({error: 'Expected an array of objects with productId and quantity'});
-    // Check if there are actually any products in the order
-    if (req.body.length === 0) return res.badRequest({error: 'Your order does not contain any products'});
+    const order = [...req.body]
+    User.find({}).exec(e => console.log(e),res.negotiate(e)).catch(console.log)
+    /*
+    validateData(order)
+      .then((order) => {
+        User.find({}).exec(e => console.log(e))
+      })
 
-    // key: value pairs of productId: quantity
-    let orderQuantity = {};
 
-    for (let product of req.body) {
-      // Check valid product format and store key: value for easy quantity lookup
-      if (product.hasOwnProperty('productId') && product.hasOwnProperty('quantity')) {
-        orderQuantity[product.productId] = product.quantity;
+      .catch((e) => {
+      console.log('ERROR', e)
+    })
 
-      } else return res.badRequest({error: 'Some objects in your array do not have a productId and quantity'});
-    }
+
+    /*
+
+    console.log(products)
+
+
+    a('LOL').then(console.log).catch(console.log)
 
     // Check if logged in user exists
     User.findOne(req.session.userId).exec(function (err, user) {
@@ -97,7 +124,7 @@ module.exports = {
         }); // Order callback end
       }); // Product callback end
     }); // User callback end
-
+  */
   },
 
   /**
