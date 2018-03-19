@@ -108,7 +108,7 @@ const findProducts = async ({ ...params }) => {
     return item
   })
 
-  return { order: merged, ...params }
+  return { ...params, order: merged }
 
 }
 
@@ -118,11 +118,11 @@ const findProducts = async ({ ...params }) => {
 const processOrder = ({ ...params }) => {
   const calculatePrice = {
     NO_SALE: (item) => {
-      item.quantity * item.price
+      return item.quantity * item.price
     },
 
     PRICE_MOD: (item) => {
-      item.quantity * item.price * item.price_mod
+      return item.quantity * item.price * item.price_mod
     },
 
     PACKAGE: (item) => {
@@ -143,7 +143,7 @@ const processOrder = ({ ...params }) => {
       }
     }),
     user: params.user.id,
-    total: order.reduce(reducer, 0)
+    total: params.order.reduce(reducer, 0)
   }
 
   return { orderDetails: orderDetails }
