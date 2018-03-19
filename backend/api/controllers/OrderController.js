@@ -9,8 +9,8 @@
  * Override default create method
  */
 const create = (req, res) => {
-  const order = [...req.body]
-  const { userId } = req.session
+  const order = [...req.body];
+  const { userId } = req.session;
 
   validateInput({ order: order, userId: userId })
     .then(findUser)
@@ -18,121 +18,120 @@ const create = (req, res) => {
     .then(processOrder)
     .then(createOrder)
     .then(res.created)
-    .catch(res.negotiate)
-
-}
+    .catch(res.negotiate);
+};
 
 /**
  * Confirm a placed order
  */
 const confirm = (req, res) => {
-  const { id: productId } = req.params
-  const { userId } = req.session
+  const { id: productId } = req.params;
+  const { userId } = req.session;
 
   Order.update({
     id: productId,
-    user: userId 
+    user: userId,
   }, {
-    user_confirmed: false 
-  }).then(res.ok).catch(res.negotiate)
-
-}
+    user_confirmed: true,
+  }).then(res.json).catch(res.negotiate);
+};
 
 /**
  * Dismiss a placed order
  */
 const dismiss = (req, res) => {
-  const { id: productId } = req.params
-  const { userId } = req.session
+  const { id: productId } = req.params;
+  const { userId } = req.session;
 
   Order.destroy({
     id: productId,
     user: userId,
-    user_confirmed: false,
-    status: { '!' : 'PENDING' }
-  }).then(res.ok).catch(res.negotiate)
+    status: 'PENDING',
+  }).then(res.json).catch(res.negotiate);
+};
 
-}
-
-/** 
- * Validate input data 
+/**
+ * Validate input data
  */
 const validateInput = ({ ...params }) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
+    const has = Object.prototype.hasOwnProperty;
 
-    if (!params.order instanceof Array || params.order.length === 0) {
-      reject('Your order is in invalid format')
+    if (!(params.order instanceof Array) || params.order.length === 0) {
+      throw new Error({ status: 400, message: 'Your order is in invalid format' });
     }
 
     if (!params.userId) {
-      reject('No userId')
+      throw new Error({ status: 400, message: 'No userId' });
     }
 
     params.order.forEach((item) => {
-      if (!item.hasOwnProperty('productId') && !item.hasOwnProperty('quantity')) {
-        reject('Your order has invalid array objects')
+      if (!has(item, 'productId') &&
+          !has(item, 'quantity') &&
+          !has(item, 'manufacturer') &&
+          item.quantity > 0) {
+        throw new Error({ status: 400, message: 'Your order has invalid array objects' });
       }
-    })
+    });
 
-    resolve(params)
-  })
-
-}
+    resolve(params);
+  });
+};
 
 /**
  * Find user information from id
  */
 const findUser = async ({ ...params }) => {
-  const user = await User.findOne(params.userId)
+  const user = await User.findOne(params.userId);
   if (!user) {
-    throw new Error('User not found')
+    throw new Error({ status: 403, message: 'User not found' });
   }
 
-  return { user: user, ...params }
+  return { user: user, ...params };
+};
 
-}
-
-/*
- * Populate order items with product information 
+/**
+ * Populate order items with product information
  */
 const findProducts = async ({ ...params }) => {
-  const productIds = params.order.map((item) => item.productId)
-  const products = await Product.find({ id: productIds })
+  const productIds = params.order.map((item) => item.productId);
+  const products = await Product.find({ id: productIds });
 
   if (products.length !== params.order.length) {
-    throw new Error('Product(s) not listed')
+    throw new Error({ status: 400, message: 'Product(s) not listed' });
   }
 
   const merged = products.map((item) => {
-    item.quantity = params.order.find(e => item.id === e.productId).quantity
-    return item
-  })
+    return {
+      quantity: params.order.find(e => item.id === e.productId).quantity,
+      ...item
+    };
+  });
 
-  return { ...params, order: merged }
-
-}
+  return { ...params, order: merged };
+};
 
 /**
- * Calulcate total price 
+ * Process order by obtaining details of the purchase
  */
 const processOrder = ({ ...params }) => {
   const calculatePrice = {
     NO_SALE: (item) => {
-      return item.quantity * item.price
+      return item.quantity * item.price;
     },
 
     PRICE_MOD: (item) => {
-      return item.quantity * item.price * item.price_mod
+      return (item.quantity * item.price * item.price_mod).toFixed(2);
     },
 
     PACKAGE: (item) => {
-      const discount = Math.floor(item.quantity / item.package_get_count) * item.package_pay_count * item.price
-      const remainder = (item.quantity % item.package_get_count) * item.price
-      return discount + remainder
+      const discount = Math.floor(item.quantity / item.package_get_count) * item.package_pay_count * item.price;
+      const remainder = (item.quantity % item.package_get_count) * item.price;
+      return discount + remainder;
     },
-  }
+  };
 
-  const reducer = (accumelator, current) => accumelator + calculatePrice[current.on_sale](current)
+  const reducer = (accumelator, current) => accumelator + calculatePrice[current.on_sale](current);
 
   const orderDetails = {
     products: params.order.map((item) => {
@@ -140,15 +139,14 @@ const processOrder = ({ ...params }) => {
         product: { name: item.name, id: item.id },
         quantity: item.quantity,
         sum: calculatePrice[item.on_sale](item),
-      }
+      };
     }),
     user: params.user.id,
-    total: params.order.reduce(reducer, 0)
-  }
+    total: params.order.reduce(reducer, 0),
+  };
 
-  return { orderDetails: orderDetails }
-
-}
+  return { orderDetails: orderDetails };
+};
 
 /**
  * Creates a new order
@@ -159,10 +157,9 @@ const createOrder = async ({ orderDetails }) => {
     user: orderDetails.user,
     total_price: orderDetails.total,
     order_details: orderDetails,
-  })
+  });
 
-  return result
+  return result;
+};
 
-}
-
-module.exports = { create, confirm, dismiss }
+module.exports = { create, confirm, dismiss };
