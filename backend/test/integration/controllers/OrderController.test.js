@@ -11,6 +11,7 @@ describe('OrderController', () => {
 
   const api = {
     login: `/api/user/login`, // POST
+    products: `/api/product`, // GET
     orders: (user) => `/api/order?populate=${user}&user_confirmed=true`, // GET ADMIN
     new: `/api/order`, // POST
     confirm: (id) => `/api/order/${id}/confirm`, // POST
@@ -33,12 +34,9 @@ describe('OrderController', () => {
 
   describe('New Order', () => {
     let cookie
-    let order = [
-      {
-        productId: 1,
-        quantity: 2,
-      },
-    ]
+    let products
+    let orderId
+    let userId
 
     // Get cookie
     it('should get cookie after login', async () => {
@@ -49,8 +47,36 @@ describe('OrderController', () => {
     })
 
     it('should get products', async () => {
-      await post(api.new, order, {}, cookie).then((res) => {
-        console.log(res.body)
+      await get(api.products, code.ok).then((res) => {
+        should.exist(res.body)
+        res.body.should.be.an.Array()
+        products = res.body
+      })
+    })
+
+    it('should order!', async () => {
+      const order = [{productId: products[0].id, quantity: 2}, {productId: products[1].id, quantity: 7}]
+      await post(api.new, order, code.created, cookie).then((res) => {
+        should.exist(res.body)
+        orderId = res.body.id
+        userId = res.body.user
+      })
+    })
+
+    it('should confirm order!', async () => {
+      await post(api.confirm(orderId), {}, code.ok, cookie).then((res) => {
+        should.exist(res.body)
+      })
+    })
+
+    it('should dismiss order!', async () => {
+      await post(api.dismiss(orderId), {}, code.ok, cookie).then((res) => {
+        should.exist(res.body)
+      })
+    })
+
+    it('should get orders!', async () => {
+      await get(api.orders(userId), code.ok, cookie).then((res) => {
         should.exist(res.body)
       })
     })
