@@ -3,8 +3,16 @@
 <div class="progress" *ngIf="loading">
   <div class="indeterminate"></div>
 </div>
-<div *ngIf="!loading && product" class="container">
+<div *ngIf="!loading && product" class="container row">
   <h2>{{product.id ? 'Edit' : 'Create new'}} product</h2>
+
+  <div *ngIf="errorMessage" class="card-panel red-text red lighten-5 error-dialogue">
+    <span>{{ errorMessage }}</span>
+    <button type="button" (click)="dismissError()"
+            class="btn-floating waves-effect waves-light red">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
 
   <form (ngSubmit)="saveProduct()" #productForm="ngForm">
 
@@ -47,7 +55,7 @@
       />
       <label for="product_price">Price (kroner)</label>
     </div>
-    
+
     <div class="input-field">
       <input
         type="number" id="product_stock_count" name="product_stock_count" required step="1" min="0"

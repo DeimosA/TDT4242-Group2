@@ -1,13 +1,24 @@
 
+<div *ngIf="errorMessage" class="card-panel red-text error-dialogue">
+  <span>{{ errorMessage }}</span>
+  <button type="button" (click)="dismissError()"
+          class="btn-floating waves-effect waves-light red">
+    <i class="material-icons">close</i>
+  </button>
+</div>
+
 <div *ngIf="currentUser" class="row">
   <h2>{{currentUser.email}}</h2>
 </div>
+
 <div *ngIf="currentUser?.order_history" class="row">
   <h3>Order history</h3>
 </div>
+
 <div *ngIf="!currentUser">
   <p>You must log in to view this page.</p>
 </div>
+
 <div *ngIf="currentUser?.isAdmin" class="row">
   <h3>Admin</h3>
   <p>Navigate through the product pages to find and edit existing products or click the button below to create a new product</p>

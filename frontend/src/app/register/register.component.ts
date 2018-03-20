@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { UserModel } from '../_shared/app.models';
+import {stat} from "fs";
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     email: "",
     password: "",
   };
+  private errorMessage: string = '';
 
   constructor(
     private userAuthService: UserAuthService,
@@ -57,13 +59,21 @@ export class RegisterComponent implements OnInit, OnDestroy {
    */
   private handleRegisterResult(statusCode){
     if(statusCode === 201){
-      // this.router.navigate(['/login']);
       this.userAuthService.login(this.userCredentials.email, this.userCredentials.password).subscribe(result => {
         this.router.navigate(['/']);
       });
-    }else{
-      alert('An unexpected error occurred :(' + statusCode);
+    } else if(statusCode === 400) {
+      this.errorMessage = 'A user with this e-mail already exist';
+    } else {
+      this.errorMessage = 'An unexpected error occurred: ' + statusCode;
     }
+  }
+
+  /**
+   * Dismiss error dialogue
+   */
+  private dismissError() {
+    this.errorMessage = '';
   }
 
 }
