@@ -14,7 +14,7 @@ export class ShoppingCartService {
 
 
   private cartSub : BehaviorSubject<ShoppingCartItem[]>;
-  
+
   constructor(private prodService: ProductsService) {
     try{
       this.cart = (localStorage.getItem("shopping-cart") ? JSON.parse(localStorage.getItem("shopping-cart")) : []).map((data) => {
@@ -24,14 +24,14 @@ export class ShoppingCartService {
           }, data.prodId, data.qty);
         }
       }).filter((e) => e != null);
-      
+
     } catch(err) {
       console.error(err);
       // Loading shopping cart failed
       this.cart = [];
     }
     this.cartSub = new BehaviorSubject(this.cart.slice());
-    this.updateAndNotify();  
+    this.updateAndNotify();
   }
 
   private findItem(id: number){
@@ -54,6 +54,11 @@ export class ShoppingCartService {
 
   public removeItem(productId : number){
     this.cart = this.cart.filter((e) => e.productId != productId);
+    this.updateAndNotify();
+  }
+
+  public clearCart() {
+    this.cart = [];
     this.updateAndNotify();
   }
 

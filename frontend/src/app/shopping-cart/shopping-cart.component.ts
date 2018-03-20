@@ -43,7 +43,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   private clearCart() {
-    this.items.forEach(item => this.deleteItem(item));
+    this.shoppingCart.clearCart();
   }
 
 }
