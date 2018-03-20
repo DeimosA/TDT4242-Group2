@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { trigger, state, style, transition, animate} from '@angular/animations';
 
-import { UserModel } from '../_shared/app.models';
+import { UserModel, ProductModel, ShoppingCartItem } from '../_shared/app.models';
 import { UserAuthService } from "../_shared/services/user-auth.service";
 import { ShoppingCartService } from "../_shared/services/shopping-cart.service";
 
@@ -60,7 +60,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
 
     this.shoppingCartSub = this.shoppingCart.getShoppingCart().subscribe((cart) => {
-      this.itemsInCart = cart.length;
+      this.itemsInCart = 0;
+      cart.forEach((element : ShoppingCartItem) => {
+        this.itemsInCart += element.quantity;
+      });
     });
 
     this.intervalId = window.setInterval(() => {
