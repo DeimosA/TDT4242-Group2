@@ -37,11 +37,11 @@
           </div>
 
           <div class="row">
-            <button (click)="iterateDown()" type="button" class="btn-floating waves-effect">
+            <button (click)="quantityChange(-1)" type="button" class="btn-floating waves-effect">
               <i class="material-icons">remove</i>
             </button>
             x{{ itemQTY }}
-            <button (click)="itemQTY = itemQTY + 1" type="button" class="btn-floating waves-effect">
+            <button (click)="quantityChange(1)" type="button" class="btn-floating waves-effect">
               <i class="material-icons">add</i>
             </button>
           </div>

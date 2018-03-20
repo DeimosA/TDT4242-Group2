@@ -19,7 +19,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   private product: ProductModel;
   private user: UserModel;
   private userAuthEventsSub: Subscription;
-  itemQTY: number;
+  private itemQTY: number;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -48,8 +48,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.shoppingCart.addItem(id, qty);
   }
 
-  iterateDown(){
-    this.itemQTY = Math.max(this.itemQTY - 1, 1);
+  quantityChange(value){
+    // unable to go below 1 item
+    this.itemQTY = Math.max(this.itemQTY + value, 1);
   }
 
 }
