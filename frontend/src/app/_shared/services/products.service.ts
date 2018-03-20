@@ -41,17 +41,23 @@ export class ProductsService {
    * @param {string} [searchTerm='']
    * @param {string} [sort='']        - Add ' ASC'/' DESC'
    * @param {number} [minPrice=0]
+   * @param {number} [maxPrice=Infinity]
    * @returns {Observable<ProductModel[]>}
    */
-  searchProducts(limit = 20, skip = 0, searchTerm = '', sort = '', minPrice = 0): Observable<ProductModel[]>{
+  searchProducts(limit = 20, skip = 0, searchTerm = '', sort = '', minPrice = 0, maxPrice = Infinity): Observable<ProductModel[]>{
     let where = {
       or: [
         { name: {contains: searchTerm} },
         { description: {contains: searchTerm} },
       ],
       listed: true, // We only want products that are still buyable
-      price: {">": minPrice},
+      price: {
+        '>=': minPrice,
+      },
     };
+    if (isFinite(maxPrice)) {
+      where.price['<='] = maxPrice;
+    }
     let url = `/api/product?where=${JSON.stringify(where)}&skip=${skip}&limit=${limit}&sort=${sort}`;
     return this.getProducts(url);
   }

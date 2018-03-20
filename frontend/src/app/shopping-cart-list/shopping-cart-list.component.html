@@ -1,22 +1,48 @@
+
 <div class="row">
-  <ul class="collection with-header">
-    <li class="collection-header"><h4>Shopping Cart</h4></li>
-    <li class="collection-item" *ngFor="let item of cartList">
-      <div class="flow-text" *ngIf="productLoaded(item)">
-        <div>
-          {{product(item).name}} - {{product(item).price}}kr
-          <button (click)="updateQty(item, 1)" class="btn-floating waves-effect"><i class="material-icons">add</i></button> 
-          x{{item.quantity}}
-          <button (click)="updateQty(item,-1)" class="btn-floating waves-effect"><i class="material-icons">remove</i></button>
-          <button (click)="deleteItem(item)" class="btn-floating waves-effect"><i class="material-icons">delete</i></button> 
+
+  <div *ngIf="cartList?.length <= 0" class="card-panel indigo lighten-5 flow-text">
+    <p> Your shopping cart is empty. Go buy something! </p>
+  </div>
+
+  <ul *ngIf="cartList?.length > 0" class="collection flow-text">
+
+    <li *ngFor="let item of cartList" class="collection-item shopping-cart-item">
+      <a [routerLink]="['/product', item._prodId]" class="black-text">
+        <div *ngIf="productLoaded(item)" class="valign-wrapper">
+
+          <div class="col s6">
+            {{ product(item).name }}
+          </div>
+
+          <div class="col s3">
+            <button type="button" (click)="updateQty($event, item, -1)" class="btn-floating waves-effect">
+              <i class="material-icons">remove</i>
+            </button>
+            x{{ item.quantity }}
+            <button type="button" (click)="updateQty($event, item, 1)" class="btn-floating waves-effect">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+
+          <div class="col s2">
+             kr {{ product(item).price.toFixed(2) }}
+          </div>
+
+          <div class="col">
+            <button type="button" (click)="deleteItem($event, item)" class="btn-floating waves-effect">
+              <i class="material-icons">delete</i>
+            </button>
+          </div>
+
         </div>
-        <div>
-          {{product(item).description}}
-        </div>
-      </div>
-      <div *ngIf="!productLoaded(item)" class="progress">
+
+        <div *ngIf="!productLoaded(item)" class="progress">
           <div class="indeterminate"></div>
-      </div> 
+        </div>
+      </a>
     </li>
+
   </ul>
+
 </div>

@@ -21,13 +21,14 @@ export class ProductContainerComponent implements OnInit {
   private loading: boolean;
 
   // vars to handle getProducts
-  private searchFormFields = {
-    search: "",
-    sort: "name ASC",
-    minPrice: 0
-  }
+  private searchFormFields: SearchForm = {
+    search: '',
+    sort: 'name ASC',
+    minPrice: 0,
+    maxPrice: Infinity,
+  };
 
-  constructor(private prodService: ProductsService,) { }
+  constructor(private prodService: ProductsService) { }
 
   ngOnInit() {
     // add products to the products[]
@@ -44,7 +45,8 @@ export class ProductContainerComponent implements OnInit {
       this.product_list_page * this.product_list_limit,
       this.searchFormFields.search,
       this.searchFormFields.sort,
-      this.searchFormFields.minPrice
+      this.searchFormFields.minPrice,
+      this.searchFormFields.maxPrice
     ).subscribe(products => {
       this.products = products;
       this.loading = false;
@@ -64,7 +66,8 @@ export class ProductContainerComponent implements OnInit {
       this.product_list_page * this.product_list_limit,
       this.searchFormFields.search,
       this.searchFormFields.sort,
-      this.searchFormFields.minPrice
+      this.searchFormFields.minPrice,
+      this.searchFormFields.maxPrice
     ).subscribe(products => {
       this.products = this.products.concat(products);
       this.loading = false;

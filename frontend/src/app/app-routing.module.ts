@@ -48,6 +48,10 @@ const appRoutes: Routes = [
     path: 'mypage',
     component: MypageComponent,
   },
+  {
+    path: 'admin',
+    component: MypageComponent,
+  },
 
   // Keep last
   {
