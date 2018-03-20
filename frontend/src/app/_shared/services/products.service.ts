@@ -52,10 +52,12 @@ export class ProductsService {
       ],
       listed: true, // We only want products that are still buyable
       price: {
-        ">=": minPrice,
-        "<=": (isFinite(maxPrice) ? maxPrice : 1000000000000), // Just toss in som giant number for inf
-      }
+        '>=': minPrice,
+      },
     };
+    if (isFinite(maxPrice)) {
+      where.price['<='] = maxPrice;
+    }
     let url = `/api/product?where=${JSON.stringify(where)}&skip=${skip}&limit=${limit}&sort=${sort}`;
     return this.getProducts(url);
   }
