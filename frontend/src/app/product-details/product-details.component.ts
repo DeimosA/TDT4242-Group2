@@ -19,6 +19,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   private product: ProductModel;
   private user: UserModel;
   private userAuthEventsSub: Subscription;
+  private itemQTY: number;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,15 +36,21 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.userAuthEventsSub = this.userAuthService.getUserAuthEvents().subscribe(user => {
       this.user = user;
     });
+    this.itemQTY = 1;
   }
 
   ngOnDestroy() {
     this.userAuthEventsSub.unsubscribe();
   }
 
-  addToCart(id){
+  addToCart(id, qty){
     // adding item ID to cart
-    this.shoppingCart.addItem(id);
+    this.shoppingCart.addItem(id, qty);
+  }
+
+  quantityChange(value){
+    // unable to go below 1 item
+    this.itemQTY = Math.max(this.itemQTY + value, 1);
   }
 
 }

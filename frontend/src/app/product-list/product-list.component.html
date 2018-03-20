@@ -20,14 +20,17 @@
         <div class="price-box valign-wrapper">
           <h3 *ngIf="product.on_sale === 'PRICE_MOD'" class="deal-display red-text vertical-align">
             {{ ((1 - product.price_mod) * 100).toFixed(0) }}% off!</h3>
-          <h3 *ngIf="product.on_sale === 'PACKAGE'" class="deal-display red-text">
-            {{product.package_get_count}} for {{product.package_pay_count}} package deal!</h3>
+          <div *ngIf="product.on_sale === 'PACKAGE'">
+            <h3 class="deal-display red-text center-align">
+              {{product.package_get_count}} for {{product.package_pay_count}} package deal!</h3>
+            <button type="button" class="waves-effect waves-light btn" (click)="addToCart($event, product.id, product.package_get_count)">Add {{product.package_get_count}} to cart</button>
+          </div>
           <div>
             <h3 *ngIf="product.on_sale === 'PRICE_MOD'" class="center-align">
               kr {{(product.price * product.price_mod).toFixed(2)}} <em class="old-price">{{product.price.toFixed(2)}}</em>
             </h3>
             <h3 *ngIf="product.on_sale !== 'PRICE_MOD'" class="center-align"> kr {{product.price.toFixed(2)}} </h3>
-            <button type="button" class="waves-effect waves-light btn" (click)="addToCart($event, product.id)">Add to cart</button>
+            <button type="button" class="waves-effect waves-light btn" (click)="addToCart($event, product.id, 1)">Add to cart</button>
           </div>
         </div>
       </a>
