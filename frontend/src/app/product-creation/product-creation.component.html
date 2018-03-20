@@ -47,6 +47,16 @@
       />
       <label for="product_price">Price (kroner)</label>
     </div>
+    
+    <div class="input-field">
+      <input
+        type="number" id="product_stock_count" name="product_stock_count" required step="1" min="0"
+        [(ngModel)]="product.stock_count"
+        #product_stock_count="ngModel"
+        class="validate"
+      />
+      <label for="product_stock_count">Stock (amount)</label>
+    </div>
 
     <!-- Sale type radio buttons -->
     <div class="radio-container">
