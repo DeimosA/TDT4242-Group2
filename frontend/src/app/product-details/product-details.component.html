@@ -37,6 +37,7 @@
           </div>
 
           <div class="row">
+
             <button (click)="quantityChange(-1)" type="button" class="btn-floating waves-effect">
               <i class="material-icons">remove</i>
             </button>
@@ -44,6 +45,13 @@
             <button (click)="quantityChange(1)" type="button" class="btn-floating waves-effect">
               <i class="material-icons">add</i>
             </button>
+
+            <p *ngIf="product.stock_count <= 0">
+              Not on storage. Check back later.
+            </p>
+            <p *ngIf="product.stock_count > 0">
+              {{ product.stock_count }} on storage! 
+            </p>
           </div>
 
           <div class="card-action">
