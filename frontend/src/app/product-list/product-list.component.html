@@ -1,12 +1,17 @@
 <div class="row">
-  <ul class="collection"
+
+  <div *ngIf="productList?.length <= 0" class="card-panel indigo lighten-5">
+    <p> We could not find any products with that search. Try again with something different. </p>
+  </div>
+
+  <ul *ngIf="productList?.length > 0" class="collection"
     infinite-scroll
     [infiniteScrollDistance]="2"
     [infiniteScrollThrottle]="10"
     (scrolled)= "nextPageCb.emit()"
     >
 
-    <li *ngFor="let product of productList" class="collection-item">
+    <li *ngFor="let product of productList" class="collection-item product-list-box">
       <a [routerLink]="['/product', product.id]" class="product-list-item black-text">
         <div>
           <h3>{{product.name}}</h3>

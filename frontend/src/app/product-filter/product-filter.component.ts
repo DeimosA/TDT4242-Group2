@@ -1,16 +1,9 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-
-import { DOCUMENT } from "@angular/platform-browser";
-
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-
-import { FormControl, FormGroup } from '@angular/forms';
-
-import { SearchForm } from '../_shared/app.models';
 import { Subscription } from 'rxjs/Subscription';
 
-
-
+import { SearchForm } from '../_shared/app.models';
 
 @Component({
   selector: 'app-product-filter',
@@ -19,32 +12,37 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ProductFilterComponent implements OnInit, OnDestroy {
 
-  // Our form data bindings
   private formGroup : FormGroup = new FormGroup({
-    search: new FormControl(""),
-    sort: new FormControl("name ASC"),
-    minPrice: new FormControl(0)
+    search: new FormControl(''),
+    sort: new FormControl('name ASC'),
+    minPrice: new FormControl(0, Validators.min(0)),
+    maxPrice: new FormControl(Infinity, Validators.min(0))
   });
 
   private formSubscription : Subscription;
 
-   // search for both name and description
   @Output()
   private search_form = new EventEmitter<SearchForm>();
-  
+
   constructor() { }
 
   ngOnInit() {
-    // Subscribe to changes from the form
     this.formSubscription = this.formGroup.valueChanges
       .pipe(debounceTime(200))
-      .subscribe((v) => {
-        this.search_form.emit(v);
-      })
+      .subscribe((v) => this.search_form.emit(v))
   }
 
   ngOnDestroy(){
     this.formSubscription.unsubscribe();
+  }
+
+  private clearFilter() {
+    this.formGroup.reset({
+      search: '',
+      sort: 'name ASC',
+      minPrice: 0,
+      maxPrice: Infinity
+    });
   }
 
 }

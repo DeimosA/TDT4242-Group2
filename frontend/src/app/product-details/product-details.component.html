@@ -1,24 +1,45 @@
 
-<div *ngIf="product">
-  <h2>{{product.name}}</h2>
-  <p><em>{{product.manufacturer}}</em></p>
-  <p>{{product.description}}</p>
-  <div>
-    <p *ngIf="product.on_sale === 'PRICE_MOD'" class="red-text">
-      {{ ((1 - product.price_mod) * 100).toFixed(0) }}% off!</p>
-    <p *ngIf="product.on_sale === 'PACKAGE'" class="red-text">
-      {{product.package_get_count}} for {{product.package_pay_count}} package deal!</p>
-  </div>
-  <div>
-    <h3 *ngIf="product.on_sale === 'PRICE_MOD'">
-      kr {{(product.price * product.price_mod).toFixed(2)}} <em class="old-price">{{product.price.toFixed(2)}}</em>
-    </h3>
-    <h3 *ngIf="product.on_sale !== 'PRICE_MOD'"> kr {{product.price.toFixed(2)}} </h3>
-    <button type="button" class="waves-effect waves-light btn" (click)="addToCart(product.id)">Add to cart</button>
+<div *ngIf="product" class="row product-details">
+
+  <div *ngIf="user?.isAdmin" class="card-panel red lighten-3 admin-panel">
+    <h3>You are logged in as admin:</h3>
+    <a [routerLink]="['/products/edit', product.id]" class="btn waves-effect">Edit this product</a>
   </div>
 
-  <div *ngIf="user && user.isAdmin">
-    <br><br><br>
-    <a [routerLink]="['/products/edit', product.id]" class="btn">Edit this product</a>
-  </div>
+    <div class="card large horizontal indigo lighten-5">
+      <div class="card-image image-wrapper">
+        <img *ngIf="!product.image" src="http://woodenwallsproject.com/wp-content/uploads/2017/01/product-placeholder.jpg">
+        <img *ngIf="product.image" src={{product.image}}>
+      </div>
+      <div class="card-stacked">
+        <div class="card-content black-text">
+          <h2>{{product.name}}</h2>
+
+          <div class="row">
+            <p>Manufactured by:<br><em>{{product.manufacturer}}</em></p>
+            <p>{{product.description}}</p>
+          </div>
+
+          <div class="row">
+            <h3>
+              <span *ngIf="product.on_sale === 'PRICE_MOD'" class="red-text">
+                {{ ((1 - product.price_mod) * 100).toFixed(0) }}% off!</span>
+              <span *ngIf="product.on_sale === 'PACKAGE'" class="red-text">
+                {{product.package_get_count}} for {{product.package_pay_count}} package deal!</span>
+            </h3>
+          </div>
+
+          <div class="row">
+            <h3 *ngIf="product.on_sale === 'PRICE_MOD'">
+              kr {{(product.price * product.price_mod).toFixed(2)}} <em class="old-price">{{product.price.toFixed(2)}}</em>
+            </h3>
+            <h3 *ngIf="product.on_sale !== 'PRICE_MOD'"> kr {{product.price.toFixed(2)}} </h3>
+          </div>
+
+          <div class="card-action">
+            <button type="button" class="waves-effect waves-light btn" (click)="addToCart(product.id)">Add to cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
