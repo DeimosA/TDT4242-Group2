@@ -5,139 +5,160 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-module.exports = {
+/**
+ * Override default create method
+ */
+const create = (req, res) => {
+  const order = [...req.body];
+  const { userId } = req.session;
 
-  /**
-   * Override default create method
-   */
-  create: function (req, res) {
-    // The body should contain an array of objects with productId and quantity
-    if (!req.body instanceof Array)
-      return res.badRequest({error: 'Expected an array of objects with productId and quantity'});
-    // Check if there are actually any products in the order
-    if (req.body.length === 0) return res.badRequest({error: 'Your order does not contain any products'});
+  validateInput({ order: order, userId: userId })
+    .then(findUser)
+    .then(findProducts)
+    .then(processOrder)
+    .then(createOrder)
+    .then(res.created)
+    .catch(res.negotiate);
+};
 
-    // key: value pairs of productId: quantity
-    let orderQuantity = {};
+/**
+ * Confirm a placed order
+ */
+const confirm = (req, res) => {
+  const { id: orderId } = req.params;
+  const { userId } = req.session;
 
-    for (let product of req.body) {
-      // Check valid product format and store key: value for easy quantity lookup
-      if (product.hasOwnProperty('productId') && product.hasOwnProperty('quantity')) {
-        orderQuantity[product.productId] = product.quantity;
+  Order.update({
+    id: orderId,
+    user: userId,
+  }, {
+    user_confirmed: true,
+  }).then(res.ok).catch(res.negotiate);
+};
 
-      } else return res.badRequest({error: 'Some objects in your array do not have a productId and quantity'});
+/**
+ * Dismiss a placed order
+ */
+const dismiss = (req, res) => {
+  const { id: orderId } = req.params;
+  const { userId } = req.session;
+
+  Order.destroy({
+    id: orderId,
+    user: userId,
+    status: 'PENDING',
+  }).then(res.ok).catch(res.negotiate);
+};
+
+/**
+ * Validate input data
+ */
+const validateInput = ({ ...params }) => {
+  return new Promise((resolve) => {
+
+    if (!(params.order instanceof Array) || params.order.length === 0) {
+      throw new Error({ status: 400, message: 'Your order is in invalid format' });
     }
 
-    // Check if logged in user exists
-    User.findOne(req.session.userId).exec(function (err, user) {
-      if (err) return res.negotiate(err);
-      if (!user) return res.unauthorized();
+    if (!params.userId) {
+      throw new Error({ status: 400, message: 'No userId' });
+    }
 
-      // Fetch product details from DB
-      // TODO don't allow buying unlisted products
-      Product.find({id: Object.keys(orderQuantity)}).exec(function (err, products) {
-        if (err) return res.negotiate(err);
-        if (!products) return res.badRequest({error: 'None of the products you ordered exist (we think)'});
-        if (products.length !== req.body.length) return res.badRequest({error: (req.body.length - products.length) +
-          ' product(s) in your request do not exist or your request contains dupes'});
-
-        // Accumulate total price for order
-        let priceAccumulator = 0;
-        // Details about this order that is returned to the user
-        let orderDetails = {};
-        orderDetails.products = [];
-
-        // Iterate over our products and calculate price
-        for (let product of products) {
-
-          let quantity = orderQuantity[product.id];
-          let productPrice = 0;
-
-          switch (product.on_sale) {
-            case 'PRICE_MOD': // Percent sale
-              productPrice = quantity * product.price * product.price_mod;
-              break;
-
-            case 'PACKAGE': // a for b package deal
-              // Calculate total price for number of full packages and the remaining number
-              let packageCount = Math.floor(quantity / product.package_get_count);
-              let remainder = quantity % product.package_get_count;
-              // Price to pay for full packages
-              productPrice = packageCount * product.package_pay_count * product.price;
-              // Add price for remaining product quantity
-              productPrice += remainder * product.price;
-              break;
-
-            default: // Full price, just for you
-              productPrice = quantity * product.price;
-          } // switch
-
-          // Add product price sum rounded to two decimals
-          productPrice = +productPrice.toFixed(2);
-          priceAccumulator += productPrice;
-
-          orderDetails.products.push({product: product, quantity: quantity, sum: productPrice});
-        } // for products end
-
-        orderDetails.totalPrice = priceAccumulator;
-        orderDetails.orderNumber = null;
-
-        // Create a new order
-        Order.create({user: user.id, total_price: priceAccumulator, order_details: orderDetails}).exec(
-          function (err, order) {
-          if (err) return res.negotiate(err);
-          if (!order) return res.serverError();
-
-          order.order_details.orderNumber = order.id;
-          order.order_details.orderDate = order.createdAt;
-          order.save(function (err) {
-            return res.created(order.order_details);
-          });
-
-        }); // Order callback end
-      }); // Product callback end
-    }); // User callback end
-
-  },
-
-  /**
-   * Confirm a placed order
-   */
-  confirm: function (req, res) {
-    Order.findOne(req.params.id).exec(function (err, order) {
-      if (err) return res.negotiate(err);
-      if (!order) return res.notFound({error: 'Order not found'});
-      if (order.user !== req.session.userId)
-        return res.forbidden({error: 'You are not permitted to perform this action'});
-
-      Order.update(order.id, {user_confirmed: true}).exec(function (err, order) {
-        if (err) return res.negotiate(err);
-        if (!order || order.length < 1) return res.notFound({error: 'Order not found'});
-
-        return res.json(order);
-      });
+    params.order.forEach((item) => {
+      if (!item.hasOwnProperty('productId') &&
+          !item.hasOwnProperty('quantity') &&
+          item.quantity > 0) {
+        throw new Error({ status: 400, message: 'Your order has invalid array objects' });
+      }
     });
-  },
 
-  /**
-   * Dismiss a placed order
-   */
-  dismiss: function (req, res) {
-    Order.findOne(req.params.id).exec(function (err, order) {
-      if (err) return res.negotiate(err);
-      if (!order) return res.notFound({error: 'Order not found'});
-      if (order.user !== req.session.userId)
-        return res.forbidden({error: 'You are not permitted to perform this action'});
-      if (order.user_confirmed && order.status !== 'PENDING')
-        return res.badRequest({error: 'Can not dismiss an accepted order'});
+    resolve(params);
+  });
+};
 
-      Order.destroy(order.id).exec(function (err, deletedOrder) {
-        if (err) return res.negotiate(err);
-        if (!deletedOrder || deletedOrder.length < 1) return res.notFound({error: 'Order not found'});
-
-        return res.json(deletedOrder);
-      });
-    });
+/**
+ * Find user information from id
+ */
+const findUser = async ({ ...params }) => {
+  const user = await User.findOne(params.userId);
+  if (!user) {
+    throw new Error({ status: 403, message: 'User not found' });
   }
 
+  return { user: user, ...params };
 };
+
+/**
+ * Populate order items with product information
+ */
+// TODO don't allow buying unlisted products
+const findProducts = async ({ ...params }) => {
+  const productIds = params.order.map((item) => item.productId);
+  const products = await Product.find({ id: productIds });
+
+  if (products.length !== params.order.length) {
+    throw new Error({ status: 400, message: 'Product(s) not listed' });
+  }
+
+  const merged = products.map((item) => {
+    return {
+      quantity: params.order.find(e => item.id === e.productId).quantity,
+      ...item
+    };
+  });
+
+  return { ...params, order: merged };
+};
+
+/**
+ * Process order by obtaining details of the purchase
+ */
+const processOrder = ({ ...params }) => {
+  const calculatePrice = {
+    NO_SALE: (item) => {
+      return item.quantity * item.price;
+    },
+
+    PRICE_MOD: (item) => {
+      return item.quantity * (item.price * item.price_mod).toFixed(2);
+    },
+
+    PACKAGE: (item) => {
+      const discount = Math.floor(item.quantity / item.package_get_count) * item.package_pay_count * item.price;
+      const remainder = (item.quantity % item.package_get_count) * item.price;
+      return discount + remainder;
+    },
+  };
+
+  const reducer = (accumulator, current) => accumulator + calculatePrice[current.on_sale](current);
+
+  const orderDetails = {
+    products: params.order.map((item) => {
+      return {
+        product: item,
+        quantity: item.quantity,
+        sum: calculatePrice[item.on_sale](item),
+      };
+    }),
+    user: params.user.id,
+    total: params.order.reduce(reducer, 0),
+  };
+
+  return { orderDetails: orderDetails };
+};
+
+/**
+ * Creates a new order
+ */
+const createOrder = async ({ orderDetails }) => {
+
+  const result = await Order.create({
+    user: orderDetails.user,
+    total_price: orderDetails.total,
+    order_details: orderDetails,
+  });
+
+  return result;
+};
+
+module.exports = { create, confirm, dismiss };
