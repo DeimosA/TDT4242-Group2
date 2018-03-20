@@ -25,29 +25,29 @@ const create = (req, res) => {
  * Confirm a placed order
  */
 const confirm = (req, res) => {
-  const { id: productId } = req.params;
+  const { id: orderId } = req.params;
   const { userId } = req.session;
 
   Order.update({
-    id: productId,
+    id: orderId,
     user: userId,
   }, {
     user_confirmed: true,
-  }).then(res.json).catch(res.negotiate);
+  }).then(res.ok).catch(res.negotiate);
 };
 
 /**
  * Dismiss a placed order
  */
 const dismiss = (req, res) => {
-  const { id: productId } = req.params;
+  const { id: orderId } = req.params;
   const { userId } = req.session;
 
   Order.destroy({
-    id: productId,
+    id: orderId,
     user: userId,
     status: 'PENDING',
-  }).then(res.json).catch(res.negotiate);
+  }).then(res.ok).catch(res.negotiate);
 };
 
 /**
@@ -55,7 +55,6 @@ const dismiss = (req, res) => {
  */
 const validateInput = ({ ...params }) => {
   return new Promise((resolve) => {
-    const has = Object.prototype.hasOwnProperty;
 
     if (!(params.order instanceof Array) || params.order.length === 0) {
       throw new Error({ status: 400, message: 'Your order is in invalid format' });
@@ -66,9 +65,8 @@ const validateInput = ({ ...params }) => {
     }
 
     params.order.forEach((item) => {
-      if (!has(item, 'productId') &&
-          !has(item, 'quantity') &&
-          !has(item, 'manufacturer') &&
+      if (!item.hasOwnProperty('productId') &&
+          !item.hasOwnProperty('quantity') &&
           item.quantity > 0) {
         throw new Error({ status: 400, message: 'Your order has invalid array objects' });
       }
@@ -93,6 +91,7 @@ const findUser = async ({ ...params }) => {
 /**
  * Populate order items with product information
  */
+// TODO don't allow buying unlisted products
 const findProducts = async ({ ...params }) => {
   const productIds = params.order.map((item) => item.productId);
   const products = await Product.find({ id: productIds });
@@ -121,7 +120,7 @@ const processOrder = ({ ...params }) => {
     },
 
     PRICE_MOD: (item) => {
-      return (item.quantity * item.price * item.price_mod).toFixed(2);
+      return item.quantity * (item.price * item.price_mod).toFixed(2);
     },
 
     PACKAGE: (item) => {
@@ -131,12 +130,12 @@ const processOrder = ({ ...params }) => {
     },
   };
 
-  const reducer = (accumelator, current) => accumelator + calculatePrice[current.on_sale](current);
+  const reducer = (accumulator, current) => accumulator + calculatePrice[current.on_sale](current);
 
   const orderDetails = {
     products: params.order.map((item) => {
       return {
-        product: { name: item.name, id: item.id },
+        product: item,
         quantity: item.quantity,
         sum: calculatePrice[item.on_sale](item),
       };

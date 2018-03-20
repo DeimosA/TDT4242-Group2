@@ -55,7 +55,7 @@ describe('OrderController', () => {
     })
 
     it('should order!', async () => {
-      const order = [{productId: products[0].id, quantity: 2}, {productId: products[1].id, quantity: 7}]
+      const order = [{ productId: products[0].id, quantity: 2 }, { productId: products[1].id, quantity: 7 }]
       await post(api.new, order, code.created, cookie).then((res) => {
         should.exist(res.body)
         orderId = res.body.id
