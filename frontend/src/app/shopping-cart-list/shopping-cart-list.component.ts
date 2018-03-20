@@ -19,7 +19,8 @@ export class ShoppingCartListComponent implements OnChanges {
   private itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
 
   @Output("itemDelete")
-  private itemDelEmitter = new EventEmitter<ShoppingCartItem>();
+  private itemDelEmitter = new EventEmitter<ShoppingCartItem>(); 
+  private loadedCount = 0;
 
   constructor() { }
 
@@ -28,10 +29,20 @@ export class ShoppingCartListComponent implements OnChanges {
   }
 
   private fillProducts() {
+    this.loadedCount = 0;
     this.cartList
-      .filter(item => !(item.productId in this.products))
+      .filter(item => {
+        if(item.productId in this.products){
+          this.loadedCount++;
+          return false;
+        }
+        return true;
+      })
       .forEach(item => item.product.subscribe(
-        (product : ProductModel) => this.products[item.productId] = product )
+        (product : ProductModel) => {
+          this.loadedCount++;
+          this.products[item.productId] = product
+        } )
       );
   }
 
@@ -56,4 +67,20 @@ export class ShoppingCartListComponent implements OnChanges {
     return this.products[item.productId];
   }
 
+  private totalCount(){
+    let count = 0;
+    this.cartList.forEach((item) => {
+      count += item.quantity 
+    });
+    return count;
+  }
+
+  private totalPrice(){
+    let totalPrice = 0;
+    this.cartList.forEach((item) => {
+      const product = this.products[item.productId];
+      totalPrice += product.price * item.quantity;   
+    });
+    return totalPrice;
+  }
 }

@@ -1,48 +1,51 @@
-
 <div class="row">
-
   <div *ngIf="cartList?.length <= 0" class="card-panel indigo lighten-5 flow-text">
     <p> Your shopping cart is empty. Go buy something! </p>
   </div>
-
-  <ul *ngIf="cartList?.length > 0" class="collection flow-text">
-
-    <li *ngFor="let item of cartList" class="collection-item shopping-cart-item">
-      <a [routerLink]="['/product', item._prodId]" class="black-text">
-        <div *ngIf="productLoaded(item)" class="valign-wrapper">
-
-          <div class="col s6">
-            {{ product(item).name }}
-          </div>
-
-          <div class="col s3">
-            <button type="button" (click)="updateQty($event, item, -1)" class="btn-floating waves-effect">
-              <i class="material-icons">remove</i>
-            </button>
-            x{{ item.quantity }}
-            <button type="button" (click)="updateQty($event, item, 1)" class="btn-floating waves-effect">
-              <i class="material-icons">add</i>
-            </button>
-          </div>
-
-          <div class="col s2">
-             kr {{ product(item).price.toFixed(2) }}
-          </div>
-
-          <div class="col">
-            <button type="button" (click)="deleteItem($event, item)" class="btn-floating waves-effect">
-              <i class="material-icons">delete</i>
-            </button>
-          </div>
-
+  <table *ngIf="cartList?.length > 0" class="bordered">
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th class="cart-td-right">Subtotal</th>
+      <th></th>
+    </tr>
+    <tr class="shopping-cart-item" *ngFor="let item of cartList" >
+      <td *ngIf="!productLoaded(item)" colspan="4">
+        <div class="progress">
+          <div class="indeterminate" ></div>
         </div>
-
-        <div *ngIf="!productLoaded(item)" class="progress">
-          <div class="indeterminate"></div>
+      </td>
+      <td *ngIf="productLoaded(item)">
+        <div>
+          <a [routerLink]="['/product', item._prodId]" class="black-text">
+            {{product(item).name}}
+          </a>
         </div>
-      </a>
-    </li>
-
-  </ul>
-
+      </td>
+      <td class="cart-td-center" *ngIf="productLoaded(item)">
+        <button (click)="updateQty($event, item, 1)" class="btn-flat waves-effect waves-light cart-btn-small"><i class="material-icons cart-icon-btn">add</i></button>
+        <span>{{item.quantity}}</span>
+        <button (click)="updateQty($event, item, -1)" class="btn-flat waves-effect waves-light cart-btn-small"><i class="material-icons cart-icon-btn">remove</i></button>
+      </td>
+      <td class="cart-td-right" *ngIf="productLoaded(item)">{{item.quantity * product(item).price.toFixed(2)}}kr</td>
+      <td class="cart-td-center">
+        <button class="btn cart-btn-small red" (click)="deleteItem($event, item)">
+          <i class="material-icons">delete</i>
+        </button>
+      </td>
+    </tr>
+    <tr class="checkout-sum">
+      <td>Sum</td>
+      <td class="cart-td-center">{{totalCount()}}</td>
+      <td class="cart-td-right">
+        <div *ngIf="loadedCount < cartList.length" class="progress">
+          <div class="determinate" [style.width.%]="100 * loadedCount/cartList.length"></div>
+        </div>
+        <span *ngIf="loadedCount >= cartList.length">{{totalPrice()}}kr</span>
+      </td>
+      <td></td>
+    </tr>
+  </table>
 </div>
+
+
