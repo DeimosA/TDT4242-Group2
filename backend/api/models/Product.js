@@ -26,6 +26,7 @@ module.exports = {
     // Whoever made this thing
     manufacturer: {
       type: 'string',
+      required: true,
     },
 
     // Whether this product is for sale anymore.

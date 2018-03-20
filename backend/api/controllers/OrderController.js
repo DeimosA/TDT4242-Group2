@@ -61,13 +61,13 @@ const validateInput = ({ ...params }) => {
     }
 
     if (!params.userId) {
-      throw new Error({ status: 400, message: 'No userId' });
+      throw new Error({ status: 403, message: 'No userId' });
     }
 
     params.order.forEach((item) => {
       if (!item.hasOwnProperty('productId') &&
-          !item.hasOwnProperty('quantity') &&
-          item.quantity > 0) {
+        !item.hasOwnProperty('quantity') &&
+        item.quantity > 0) {
         throw new Error({ status: 400, message: 'Your order has invalid array objects' });
       }
     });
@@ -152,13 +152,11 @@ const processOrder = ({ ...params }) => {
  */
 const createOrder = async ({ orderDetails }) => {
 
-  const result = await Order.create({
+  return await Order.create({
     user: orderDetails.user,
     total_price: orderDetails.total,
     order_details: orderDetails,
   });
-
-  return result;
 };
 
 module.exports = { create, confirm, dismiss };

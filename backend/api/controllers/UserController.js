@@ -13,11 +13,11 @@ module.exports = {
   login: function (req, res) {
     // Find user and check password
     User.findOne({email: req.param('email')}).exec(function (err, user) {
-      if (err) return res.negotiate(err);
-      if (!user) return res.unauthorized({error:'Wrong e-mail or password'});
+      if (err) { return res.negotiate(err); }
+      if (!user) { return res.unauthorized({error:'Wrong e-mail or password'}); }
       user.checkPassword(req.param('password'), function (err, verified) {
-        if (err) return res.negotiate(err);
-        if (!verified) return res.unauthorized({error:'Wrong e-mail or password'});
+        if (err) { return res.negotiate(err); }
+        if (!verified) { return res.unauthorized({error:'Wrong e-mail or password'}); }
 
         // Store as logged in
         req.session.userId = user.id;
@@ -44,8 +44,8 @@ module.exports = {
     if (req.session.authenticated && req.session.userId) {
       // Find user
       User.findOne(req.session.userId).exec(function (err, user) {
-        if (err) return res.negotiate(err);
-        if (!user) return res.unauthorized();
+        if (err) { return res.negotiate(err); }
+        if (!user) { return res.unauthorized(); }
 
         // Return details
         return res.json(user);
@@ -59,9 +59,9 @@ module.exports = {
    * Give a user admin privileges
    */
   makeAdmin: function (req, res) {
-    User.update(parseInt(req.params.id), {isAdmin: true}).exec(function (err, user) {
-      if (err) return res.negotiate(err);
-      if (!user || user.length < 1) return res.notFound({error: 'User not found'});
+    User.update(req.params.id, {isAdmin: true}).exec(function (err, user) {
+      if (err) { return res.negotiate(err); }
+      if (!user || user.length < 1) { return res.notFound({error: 'User not found'}); }
       return res.json(user);
     });
   },
@@ -70,9 +70,9 @@ module.exports = {
    * Remove a users admin privileges
    */
   removeAdmin: function (req, res) {
-    User.update(parseInt(req.params.id), {isAdmin: false}).exec(function (err, user) {
-      if (err) return res.negotiate(err);
-      if (!user || user.length < 1) return res.notFound({error: 'User not found'});
+    User.update(req.params.id, {isAdmin: false}).exec(function (err, user) {
+      if (err) { return res.negotiate(err); }
+      if (!user || user.length < 1) { return res.notFound({error: 'User not found'}); }
       return res.json(user);
     });
   },

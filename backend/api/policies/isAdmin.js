@@ -15,10 +15,10 @@ module.exports = function(req, res, next) {
 
   // Find the logged in user and check if admin
   User.findOne(req.session.userId).exec(function (err, user) {
-    if (err) return res.negotiate(err);
-    if (!user) return res.unauthorized();
+    if (err) { return res.negotiate(err); }
+    if (!user) { return res.unauthorized(); }
 
-    if (user.isAdmin) return next(); // User is admin so continue
+    if (user.isAdmin) { return next(); } // User is admin so continue
     return res.forbidden({error: 'You are not permitted to perform this action'});
   });
 
