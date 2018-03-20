@@ -27,7 +27,7 @@ export class ShoppingCartListComponent implements OnChanges {
     this.fillProducts()
   }
 
-  private fillProducts():void {
+  private fillProducts() {
     this.cartList
       .filter(item => !(item.productId in this.products))
       .forEach(item => item.product.subscribe(
