@@ -76,7 +76,7 @@ const setStatus = (req, res) => {
       return res.notFound({error: 'Could not find order with the provided criteria'});
     }
     // TODO mail service call
-    return res.json(updatedOrder);
+    return res.json(updatedOrder[0]);
   }).catch(res.negotiate);
 };
 
