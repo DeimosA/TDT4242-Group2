@@ -54,10 +54,30 @@ const dismiss = (req, res) => {
  * Set/change order status
  */
 const setStatus = (req, res) => {
-  // TODO must be confirmed by user
-  // TODO can not be set back to pending?
-  console.log('Status set ' + req.params.id);
-  return res.ok(req.body);
+
+  const allowedStatuses = [
+    // 'PENDING', Should not be able to set back to pending
+    'ACCEPTED',
+    'AWAITING_RESUPPLY',
+    'SHIPPED',
+    'CANCELLED',
+  ];
+  const criteria = {
+    id: req.params.id,
+    // Must be confirmed by user
+    user_confirmed: true,
+  };
+
+  // Only allow selected statuses
+  if (!allowedStatuses.includes(req.body.status)) {return res.badRequest({error: 'Status not allowed'});}
+
+  Order.update(criteria, {status: req.body.status}).then(updatedOrder => {
+    if (!updatedOrder || updatedOrder.length < 1) {
+      return res.notFound({error: 'Could not find order with the provided criteria'});
+    }
+    // TODO mail service call
+    return res.json(updatedOrder);
+  }).catch(res.negotiate);
 };
 
 /**
