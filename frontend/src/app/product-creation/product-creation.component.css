@@ -17,9 +17,3 @@
   width: 50px;
   text-align: center;
 }
-
-.error-dialogue {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}

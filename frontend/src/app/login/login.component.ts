@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     email: "",
     password: "",
   };
-  private errorMessage: string = '';
+  private alertMessage: string = '';
 
   constructor(
     private userAuthService: UserAuthService,
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   login(){
     // call service object, get observable.
     this.userAuthService.login(this.userCredentials.email, this.userCredentials.password).subscribe(res => {
-      // successfull login
+      // successful login
       this.handleLoginResult(200);
     }, err =>{
       // error
@@ -70,18 +70,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     }else if(statusCode === 401){
       // handle username or password wrong
-      this.errorMessage = 'Wrong username or password';
+      this.alertMessage = 'Wrong username or password';
     }else{
       // handle system error
-      this.errorMessage = 'An unexpected error occurred: ' + statusCode;
+      this.alertMessage = 'An unexpected error occurred: ' + statusCode;
     }
-  }
-
-  /**
-   * Dismiss error dialogue
-   */
-  private dismissError() {
-    this.errorMessage = '';
   }
 
 }

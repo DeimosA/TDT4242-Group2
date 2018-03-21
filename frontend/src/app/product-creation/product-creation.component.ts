@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/empty';
 
 import { ProductsService } from '../_shared/services/products.service';
 import { ProductModel } from "../_shared/app.models";
@@ -18,7 +19,7 @@ export class ProductCreationComponent implements OnInit {
   private loading: boolean = false;
   private product: ProductModel;
   private percent_sale: number;
-  private errorMessage: string = '';
+  private alertMessage: string = '';
 
   constructor(
     private productsService: ProductsService,
@@ -35,6 +36,7 @@ export class ProductCreationComponent implements OnInit {
         } else {
           // Not edit so create new
           this.product = <ProductModel>{};
+          return Observable.empty();
         }
       });
 
@@ -46,7 +48,7 @@ export class ProductCreationComponent implements OnInit {
       setTimeout(() => Materialize.updateTextFields(), 5); // Fix to not have labels on top of input text
     }, error => {
       if (error.status) {
-        this.errorMessage = 'An error occurred loading the product details: ' + error.status;
+        this.alertMessage = 'An error occurred loading the product details: ' + error.status;
       } else {
         console.log(error);
       }
@@ -62,11 +64,11 @@ export class ProductCreationComponent implements OnInit {
     }, error => {
       this.loading = false;
       if (error.status === 400) {
-        this.errorMessage = 'Validation failed. Make sure product name does not already exist';
+        this.alertMessage = 'Validation failed. Make sure product name does not already exist';
       } else if (error.status === 401 || error.status === 403) {
-        this.errorMessage = 'You must be logged in as admin to create or update products';
+        this.alertMessage = 'You must be logged in as admin to create or update products';
       } else if (error.status) {
-        this.errorMessage = 'An error occurred saving the product: ' + error.status;
+        this.alertMessage = 'An error occurred saving the product: ' + error.status;
       } else {
         console.log(error);
       }
@@ -78,13 +80,6 @@ export class ProductCreationComponent implements OnInit {
   }
   private setPercentSale() {
     this.percent_sale = (1 - this.product.price_mod) * 100;
-  }
-
-  /**
-   * Dismiss error dialogue
-   */
-  private dismissError() {
-    this.errorMessage = '';
   }
 
 }

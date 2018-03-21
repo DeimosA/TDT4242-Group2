@@ -1,11 +1,5 @@
 
-<div *ngIf="errorMessage" class="card-panel red-text error-dialogue">
-  <span>{{ errorMessage }}</span>
-  <button type="button" (click)="dismissError()"
-          class="btn-floating waves-effect waves-light red">
-    <i class="material-icons">close</i>
-  </button>
-</div>
+<app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
 
 <div *ngIf="currentUser" class="row">
   <h2>{{currentUser.email}}</h2>

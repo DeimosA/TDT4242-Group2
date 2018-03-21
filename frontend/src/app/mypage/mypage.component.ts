@@ -14,7 +14,7 @@ export class MypageComponent implements OnInit, OnDestroy {
 
   private currentUser: UserModel;
   private userAuthEventsSub: Subscription;
-  private errorMessage: string = '';
+  private alertMessage: string = '';
 
   constructor(
     private userAuthService: UserAuthService,
@@ -30,7 +30,7 @@ export class MypageComponent implements OnInit, OnDestroy {
           this.router.navigate(['/login']);
         }
       }, err => {
-        this.errorMessage = 'An error occurred getting user data. Try again later';
+        this.alertMessage = 'An error occurred getting user data. Try again later';
       }
     );
   }
@@ -38,13 +38,6 @@ export class MypageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // Un-subscribe from login and logout user auth events to avoid mem leaks
     this.userAuthEventsSub.unsubscribe();
-  }
-
-  /**
-   * Dismiss error dialogue
-   */
-  private dismissError() {
-    this.errorMessage = '';
   }
 
 }

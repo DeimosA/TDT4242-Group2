@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserAuthService } from '../_shared/services/user-auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
+import { UserAuthService } from '../_shared/services/user-auth.service';
 import { UserModel } from '../_shared/app.models';
-import {stat} from "fs";
 
 @Component({
   selector: 'app-register',
@@ -20,7 +19,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     email: "",
     password: "",
   };
-  private errorMessage: string = '';
+  private alertMessage: string = '';
 
   constructor(
     private userAuthService: UserAuthService,
@@ -63,17 +62,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
       });
     } else if(statusCode === 400) {
-      this.errorMessage = 'A user with this e-mail already exist';
+      this.alertMessage = 'A user with this e-mail already exist';
     } else {
-      this.errorMessage = 'An unexpected error occurred: ' + statusCode;
+      this.alertMessage = 'An unexpected error occurred: ' + statusCode;
     }
-  }
-
-  /**
-   * Dismiss error dialogue
-   */
-  private dismissError() {
-    this.errorMessage = '';
   }
 
 }

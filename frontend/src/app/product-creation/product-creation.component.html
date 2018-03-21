@@ -6,13 +6,7 @@
 <div *ngIf="!loading && product" class="container row">
   <h2>{{product.id ? 'Edit' : 'Create new'}} product</h2>
 
-  <div *ngIf="errorMessage" class="card-panel red-text red lighten-5 error-dialogue">
-    <span>{{ errorMessage }}</span>
-    <button type="button" (click)="dismissError()"
-            class="btn-floating waves-effect waves-light red">
-      <i class="material-icons">close</i>
-    </button>
-  </div>
+  <app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
 
   <form (ngSubmit)="saveProduct()" #productForm="ngForm">
 

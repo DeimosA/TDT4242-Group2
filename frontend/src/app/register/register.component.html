@@ -29,13 +29,7 @@
             <label for="password" class="black-text" data-error="Minimum 8 characters">password</label>
           </div>
 
-          <div *ngIf="errorMessage" class="card-panel red-text error-dialogue">
-            <span>{{ errorMessage }}</span>
-            <button type="button" (click)="dismissError()"
-                    class="btn-floating waves-effect waves-light red">
-              <i class="material-icons">close</i>
-            </button>
-          </div>
+          <app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
 
           <button type="submit" [disabled]="!registerForm.form.valid"
                   class="btn-flat green white-text waves-effect waves-light right register-button">Register</button>
