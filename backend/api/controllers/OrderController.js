@@ -51,6 +51,16 @@ const dismiss = (req, res) => {
 };
 
 /**
+ * Set/change order status
+ */
+const setStatus = (req, res) => {
+  // TODO must be confirmed by user
+  // TODO can not be set back to pending?
+  console.log('Status set ' + req.params.id);
+  return res.ok(req.body);
+};
+
+/**
  * Validate input data
  */
 const validateInput = ({ ...params }) => {
@@ -159,4 +169,4 @@ const createOrder = async ({ orderDetails }) => {
   });
 };
 
-module.exports = { create, confirm, dismiss };
+module.exports = { create, confirm, dismiss, setStatus };

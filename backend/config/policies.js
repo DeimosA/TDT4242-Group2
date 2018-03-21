@@ -80,6 +80,7 @@ module.exports.policies = {
     findOne: 'isAdmin',
     confirm: 'sessionAuth',
     dismiss: 'sessionAuth',
+    setStatus: 'isAdmin',
   }
 
 };
