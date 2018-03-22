@@ -64,7 +64,7 @@ const setStatus = (req, res) => {
   ];
   const criteria = {
     id: req.params.id,
-    // Must be confirmed by user
+    // Must be confirmed by user to change status
     user_confirmed: true,
   };
 
@@ -95,9 +95,9 @@ const validateInput = ({ ...params }) => {
     }
 
     params.order.forEach((item) => {
-      if (!item.hasOwnProperty('productId') &&
-        !item.hasOwnProperty('quantity') &&
-        item.quantity > 0) {
+      if (!item.hasOwnProperty('productId') ||
+        !item.hasOwnProperty('quantity') ||
+        item.quantity <= 0) {
         throw new Error({ status: 400, message: 'Your order has invalid array objects' });
       }
     });
@@ -121,10 +121,9 @@ const findUser = async ({ ...params }) => {
 /**
  * Populate order items with product information
  */
-// TODO don't allow buying unlisted products
 const findProducts = async ({ ...params }) => {
   const productIds = params.order.map((item) => item.productId);
-  const products = await Product.find({ id: productIds });
+  const products = await Product.find({ id: productIds, listed: true });
 
   if (products.length !== params.order.length) {
     throw new Error({ status: 400, message: 'Product(s) not listed' });
@@ -133,7 +132,7 @@ const findProducts = async ({ ...params }) => {
   const merged = products.map((item) => {
     return {
       quantity: params.order.find(e => item.id === e.productId).quantity,
-      ...item
+      product: item,
     };
   });
 
@@ -145,47 +144,49 @@ const findProducts = async ({ ...params }) => {
  */
 const processOrder = ({ ...params }) => {
   const calculatePrice = {
-    NO_SALE: (item) => {
-      return item.quantity * item.price;
+    NO_SALE: ({ quantity, product }) => {
+      return quantity * product.price;
     },
 
-    PRICE_MOD: (item) => {
-      return item.quantity * (item.price * item.price_mod).toFixed(2);
+    PRICE_MOD: ({ quantity, product }) => {
+      return quantity * (product.price * product.price_mod).toFixed(2);
     },
 
-    PACKAGE: (item) => {
-      const discount = Math.floor(item.quantity / item.package_get_count) * item.package_pay_count * item.price;
-      const remainder = (item.quantity % item.package_get_count) * item.price;
-      return discount + remainder;
+    PACKAGE: ({ quantity, product }) => {
+      const discounted = Math.floor(quantity / product.package_get_count) * product.package_pay_count * product.price;
+      const remainder = (quantity % product.package_get_count) * product.price;
+      return discounted + remainder;
     },
   };
 
-  const reducer = (accumulator, current) => accumulator + calculatePrice[current.on_sale](current);
+  const products = params.order.map((item) => {
+    return {
+      product: item.product,
+      quantity: item.quantity,
+      line_price: calculatePrice[item.product.on_sale](item),
+    };
+  });
+  const totalPrice = products.reduce(
+    (accumulator, current) => {
+      return accumulator + current.line_price;
+    }, 0);
 
-  const orderDetails = {
-    products: params.order.map((item) => {
-      return {
-        product: item,
-        quantity: item.quantity,
-        sum: calculatePrice[item.on_sale](item),
-      };
-    }),
+  return {
+    products: products,
     user: params.user.id,
-    total: params.order.reduce(reducer, 0),
+    total_price: totalPrice,
   };
-
-  return { orderDetails: orderDetails };
 };
 
 /**
  * Creates a new order
  */
-const createOrder = async ({ orderDetails }) => {
+const createOrder = async (orderDetails) => {
 
   return await Order.create({
     user: orderDetails.user,
-    total_price: orderDetails.total,
-    order_details: orderDetails,
+    total_price: orderDetails.total_price,
+    order_details: orderDetails.products,
   });
 };
 
