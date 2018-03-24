@@ -16,7 +16,6 @@ const create = (req, res) => {
     .then(findUser)
     .then(findProducts)
     .then(processOrder)
-    .then(createOrder)
     .then(res.created)
     .catch(res.negotiate);
 };
@@ -54,7 +53,6 @@ const dismiss = (req, res) => {
  * Set/change order status
  */
 const setStatus = (req, res) => {
-
   const allowedStatuses = [
     // 'PENDING', Should not be able to set back to pending
     'ACCEPTED',
@@ -69,11 +67,13 @@ const setStatus = (req, res) => {
   };
 
   // Only allow selected statuses
-  if (!allowedStatuses.includes(req.body.status)) {return res.badRequest({error: 'Status not allowed'});}
+  if (!allowedStatuses.includes(req.body.status)) {
+    return res.badRequest({ error: 'Status not allowed' });
+  }
 
-  Order.update(criteria, {status: req.body.status}).then(updatedOrder => {
+  Order.update(criteria, { status: req.body.status }).then(updatedOrder => {
     if (!updatedOrder || updatedOrder.length < 1) {
-      return res.notFound({error: 'Could not find order with the provided criteria'});
+      return res.notFound({ error: 'Could not find order with the provided criteria' });
     }
     // TODO mail service call
     return res.json(updatedOrder[0]);
@@ -140,25 +140,29 @@ const findProducts = async ({ ...params }) => {
 };
 
 /**
+ * Calculate price based on sale type
+ */
+const calculatePrice = {
+  NO_SALE: ({ quantity, product }) => {
+    return quantity * product.price;
+  },
+
+  PRICE_MOD: ({ quantity, product }) => {
+    return quantity * (product.price * product.price_mod).toFixed(2);
+  },
+
+  PACKAGE: ({ quantity, product }) => {
+    const { package_get_count, package_pay_count, price } = product;
+    const discounted = Math.floor(quantity / package_get_count) * package_pay_count * price;
+    const remainder = (quantity % package_get_count) * price;
+    return discounted + remainder;
+  },
+};
+
+/**
  * Process order by obtaining details of the purchase
  */
-const processOrder = ({ ...params }) => {
-  const calculatePrice = {
-    NO_SALE: ({ quantity, product }) => {
-      return quantity * product.price;
-    },
-
-    PRICE_MOD: ({ quantity, product }) => {
-      return quantity * (product.price * product.price_mod).toFixed(2);
-    },
-
-    PACKAGE: ({ quantity, product }) => {
-      const discounted = Math.floor(quantity / product.package_get_count) * product.package_pay_count * product.price;
-      const remainder = (quantity % product.package_get_count) * product.price;
-      return discounted + remainder;
-    },
-  };
-
+const processOrder = async ({ ...params }) => {
   const products = params.order.map((item) => {
     return {
       product: item.product,
@@ -166,27 +170,12 @@ const processOrder = ({ ...params }) => {
       line_price: calculatePrice[item.product.on_sale](item),
     };
   });
-  const totalPrice = products.reduce(
-    (accumulator, current) => {
-      return accumulator + current.line_price;
-    }, 0);
-
-  return {
-    products: products,
-    user: params.user.id,
-    total_price: totalPrice,
-  };
-};
-
-/**
- * Creates a new order
- */
-const createOrder = async (orderDetails) => {
+  const totalPrice = products.reduce((accumulator, current) => accumulator + current.line_price, 0);
 
   return await Order.create({
-    user: orderDetails.user,
-    total_price: orderDetails.total_price,
-    order_details: orderDetails.products,
+    user: params.user.id,
+    total_price: totalPrice,
+    order_details: products,
   });
 };
 
