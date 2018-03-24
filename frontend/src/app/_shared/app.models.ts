@@ -5,12 +5,15 @@ import { Observable } from "rxjs/Observable";
  */
 class UserModel{
 
-  id: number;
+  id: number | string;
   email: string;
   isAdmin: boolean;
 
   constructor(user) {
-    if (user.hasOwnProperty('id') && user.hasOwnProperty('email') && user.hasOwnProperty('isAdmin')) {
+    if ( (typeof user.id === 'number' || typeof user.id === 'string') && user.id &&
+        typeof user.email === 'string' && user.email &&
+        typeof user.isAdmin === 'boolean' ) {
+
       this.id = user.id;
       this.email = user.email;
       this.isAdmin = user.isAdmin;
