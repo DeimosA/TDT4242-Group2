@@ -6,8 +6,11 @@ import 'rxjs/add/operator/switchMap';
 import { ProductsService } from '../_shared/services/products.service';
 import { ProductModel } from "../_shared/app.models";
 
-declare let Materialize; // Webstorm doesn't recognize Materialize global
+declare let Materialize; // To recognize Materialize global
 
+/**
+ * Creates a new or edits an existing product
+ */
 @Component({
   selector: 'app-product-creation',
   templateUrl: './product-creation.component.html',
@@ -29,6 +32,7 @@ export class ProductCreationComponent implements OnInit {
     let productObs: Observable<ProductModel> = this.activatedRoute.paramMap.switchMap(
       (params: ParamMap) => {
         if (params.has('productId')) {
+          // Editing existing product, so load it
           this.loading = true;
           return this.productsService.getProduct(params.get('productId'));
         } else {
@@ -49,6 +53,9 @@ export class ProductCreationComponent implements OnInit {
     });
   }
 
+  /**
+   * Saves the edited product
+   */
   private saveProduct() {
     this.loading = true;
     // Call product service to create a new or update existing product
@@ -62,9 +69,16 @@ export class ProductCreationComponent implements OnInit {
     });
   }
 
+  /**
+   * Calculate the price modifier from a percent value
+   */
   private setPriceMod(percent_value: number) {
     this.product.price_mod = 1 - percent_value / 100;
   }
+
+  /**
+   * Calculate sale percent value from price modifier
+   */
   private setPercentSale() {
     this.percent_sale = (1 - this.product.price_mod) * 100;
   }
