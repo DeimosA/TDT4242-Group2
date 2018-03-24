@@ -2,7 +2,7 @@
 <div *ngIf="currentUser" class="row">
   <h2>{{currentUser.email}}</h2>
 </div>
-<div *ngIf="currentUser?.order_history" class="row">
+<div *ngIf="orderHistory?.length > 0" class="row">
   <h3>Order history</h3>
 </div>
 <div *ngIf="!currentUser">

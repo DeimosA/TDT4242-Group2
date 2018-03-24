@@ -14,6 +14,7 @@ export class MypageComponent implements OnInit, OnDestroy {
 
   private currentUser: UserModel;
   private userAuthEventsSub: Subscription;
+  private orderHistory: object[];
 
   constructor(
     private userAuthService: UserAuthService,
@@ -25,10 +26,13 @@ export class MypageComponent implements OnInit, OnDestroy {
     this.userAuthEventsSub = this.userAuthService.getUserAuthEvents().subscribe(
       user => {
         this.currentUser = user;
-        if(user == null){
-          this.router.navigate(['/login']);
+        if (this.currentUser) {
+          this.getOrderHistory();
         }
-      }, err => {
+        // if(user == null){
+        //   this.router.navigate(['/login']);
+        // }
+      }, error => {
         alert('An error occurred. Try again later.')
       }
     );
@@ -37,6 +41,18 @@ export class MypageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // Un-subscribe from login and logout user auth events to avoid mem leaks
     this.userAuthEventsSub.unsubscribe();
+  }
+
+  private getOrderHistory() {
+    this.userAuthService.getOrderHistory(this.currentUser.id).subscribe(
+      result => {
+        this.orderHistory = result;
+        console.log(this.orderHistory);
+      }, error => {
+        // TODO use fancy alert
+        alert('Error getting user history');
+      }
+    );
   }
 
 }

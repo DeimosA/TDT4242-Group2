@@ -8,6 +8,7 @@ class UserModel{
   id: number | string;
   email: string;
   isAdmin: boolean;
+  order_history: object[];
 
   constructor(user) {
     if ( (typeof user.id === 'number' || typeof user.id === 'string') && user.id &&
@@ -17,6 +18,8 @@ class UserModel{
       this.id = user.id;
       this.email = user.email;
       this.isAdmin = user.isAdmin;
+      if (user.order_history) {this.order_history = user.order_history}
+
     } else {
       throw new Error('Not a valid user object');
     }

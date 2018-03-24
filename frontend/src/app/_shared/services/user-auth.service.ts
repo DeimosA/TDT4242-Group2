@@ -63,7 +63,7 @@ export class UserAuthService {
   }
 
   /**
-   * Get the currently logged in user, either from locally stored object or from backend
+   * Get the currently logged in user, if any
    * @returns {Observable<UserModel>}
    */
   getCurrentUser(): Observable<UserModel> {
@@ -71,6 +71,16 @@ export class UserAuthService {
     return this.http.get(url)
       .map(result => new UserModel(result))
       .do(result => this.userLoggedIn(result));
+  }
+
+  /**
+   * Get a users order history
+   * @param {number | string} userId
+   * @returns {Observable<object[]>}
+   */
+  getOrderHistory(userId: number | string): Observable<object[]> {
+    let url = '/api/user/' + userId + '?populate=order_history';
+    return this.http.get(url).map(result => new UserModel(result).order_history);
   }
 
   /**
