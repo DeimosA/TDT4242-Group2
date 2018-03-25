@@ -8,7 +8,7 @@ class UserModel{
   id: number | string;
   email: string;
   isAdmin: boolean;
-  order_history: object[];
+  order_history: OrderModel[];
 
   constructor(user) {
     if ( (typeof user.id === 'number' || typeof user.id === 'string') && user.id &&
@@ -75,6 +75,9 @@ class ShoppingCartItem{
   }
 }
 
+/**
+ * Product search and filter
+ */
 interface SearchForm {
   search: string;
   sort: string;
@@ -82,4 +85,16 @@ interface SearchForm {
   maxPrice: number;
 }
 
-export {UserModel, ProductModel, ShoppingCartItem, SearchForm}
+/**
+ * Order details
+ */
+interface OrderModel {
+  id: number | string;
+  user: any;
+  total_price: number;
+  status: string;
+  user_confirmed: boolean;
+  order_details: object[];
+}
+
+export { UserModel, ProductModel, ShoppingCartItem, SearchForm, OrderModel }

@@ -47,10 +47,9 @@ export class MypageComponent implements OnInit, OnDestroy {
     this.userAuthService.getOrderHistory(this.currentUser.id).subscribe(
       result => {
         this.orderHistory = result;
-        console.log(this.orderHistory);
       }, error => {
         // TODO use fancy alert
-        alert('Error getting user history');
+        alert('Error getting user history' + error.status);
       }
     );
   }

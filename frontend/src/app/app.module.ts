@@ -25,6 +25,7 @@ import { ProductFilterComponent } from './product-filter/product-filter.componen
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { ShoppingCartListComponent } from './shopping-cart-list/shopping-cart-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
+import { OrderHistoryListComponent } from './order-history-list/order-history-list.component';
 
 /**
  * Initialize app and check if a user is logged in
@@ -53,7 +54,8 @@ function init_app(userAuthService: UserAuthService) {
     ProductFilterComponent,
     ShoppingCartComponent,
     ShoppingCartListComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    OrderHistoryListComponent
   ],
   imports: [
     BrowserModule,

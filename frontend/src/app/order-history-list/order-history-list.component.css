@@ -1,0 +1,27 @@
+
+.collapsible-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 3rem;
+}
+
+.collapsible-header > div {
+  min-width: 25%;
+}
+
+.collapsible-header > div:nth-child(2) {text-align: center;}
+.collapsible-header > div:nth-child(3) {text-align: right;}
+
+.collapsible-body {
+  padding: 2rem 3rem;
+}
+
+.status-red {
+  color: red;
+}
+.status-yellow {
+  color: yellow;
+}
+.status-green {
+  color: green;
+}

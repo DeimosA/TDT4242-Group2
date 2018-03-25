@@ -7,7 +7,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 
-import { UserModel } from "../app.models";
+import { UserModel, OrderModel } from "../app.models";
 
 @Injectable()
 export class UserAuthService {
@@ -78,9 +78,9 @@ export class UserAuthService {
    * @param {number | string} userId
    * @returns {Observable<object[]>}
    */
-  getOrderHistory(userId: number | string): Observable<object[]> {
-    let url = '/api/user/' + userId + '?populate=order_history';
-    return this.http.get(url).map(result => new UserModel(result).order_history);
+  getOrderHistory(userId: number | string): Observable<OrderModel[]> {
+    let url = `/api/user/${userId}?populate=order_history`;
+    return this.http.get<OrderModel[]>(url).map(result => new UserModel(result).order_history);
   }
 
   /**
