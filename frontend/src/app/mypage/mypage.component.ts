@@ -1,10 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { UserAuthService } from "../_shared/services/user-auth.service";
-import { UserModel } from "../_shared/app.models";
+import { UserAuthService } from '../_shared/services/user-auth.service';
+import { OrderModel, UserModel } from '../_shared/app.models';
 
+
+/**
+ * Show info related to a user
+ */
 @Component({
   selector: 'app-mypage',
   templateUrl: './mypage.component.html',
@@ -18,7 +21,6 @@ export class MypageComponent implements OnInit, OnDestroy {
 
   constructor(
     private userAuthService: UserAuthService,
-    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -29,9 +31,6 @@ export class MypageComponent implements OnInit, OnDestroy {
         if (this.currentUser) {
           this.getOrderHistory();
         }
-        // if(user == null){
-        //   this.router.navigate(['/login']);
-        // }
       }, error => {
         alert('An error occurred. Try again later.')
       }
@@ -43,6 +42,9 @@ export class MypageComponent implements OnInit, OnDestroy {
     this.userAuthEventsSub.unsubscribe();
   }
 
+  /**
+   * Get a users order history
+   */
   private getOrderHistory() {
     this.userAuthService.getOrderHistory(this.currentUser.id).subscribe(
       result => {
@@ -50,6 +52,20 @@ export class MypageComponent implements OnInit, OnDestroy {
       }, error => {
         // TODO use fancy alert
         alert('Error getting user history' + error.status);
+      }
+    );
+  }
+
+  /**
+   * Dismiss an order
+   */
+  private dismissOrder(order: OrderModel) {
+    this.userAuthService.dismissOrder(order.id).subscribe(
+      (next) => {
+        this.getOrderHistory();
+      }, (error) => {
+        // TODO use fancy alert
+        alert('An error occurred cancelling your order. Try again later: ' + error.status);
       }
     );
   }

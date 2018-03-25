@@ -6,10 +6,10 @@
       <div>
         Order status:
         <span [ngClass]="{
-        'status-red': order.status === 'PENDING' || order.status === 'CANCELLED',
-        'status-yellow': order.status === 'ACCEPTED' || order.status === 'AWAITING_RESUPPLY',
-        'status-green': order.status === 'SHIPPED'
-      }">
+          'status-red': order.status === 'PENDING' || order.status === 'CANCELLED',
+          'status-yellow': order.status === 'ACCEPTED' || order.status === 'AWAITING_RESUPPLY',
+          'status-green': order.status === 'SHIPPED'
+        }">
           {{ order.status }}
         </span>
       </div>
@@ -22,6 +22,12 @@
     </div>
 
     <div class="collapsible-body">
+      <button *ngIf="order.status === 'PENDING'"
+              type="button"
+              (click)="openDismissOrderModal(order)"
+              class="btn waves-effect waves-light red">
+        Cancel this order
+      </button>
       <table class="striped">
         <thead>
         <tr>
@@ -52,3 +58,21 @@
 
   </li>
 </ul>
+
+<div materialize="modal" [materializeActions]="modalActions" id="confirmDismissOrderModal" class="modal">
+  <div class="modal-content">
+    <h4>Cancel order</h4>
+    <p>Are you sure you want to cancel this order?</p>
+    <p>An order can only be cancelled if it is still pending.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="modal-action waves-effect btn-flat"
+            (click)="cancelDismissOrder()">
+      Close
+    </button>
+    <button type="button" class="modal-action waves-effect btn-flat"
+            (click)="dismissOrder()">
+      Cancel order
+    </button>
+  </div>
+</div>

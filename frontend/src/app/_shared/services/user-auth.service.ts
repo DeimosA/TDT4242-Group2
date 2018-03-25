@@ -9,6 +9,10 @@ import 'rxjs/add/operator/map';
 
 import { UserModel, OrderModel } from "../app.models";
 
+
+/**
+ * User authentication and other user related queries
+ */
 @Injectable()
 export class UserAuthService {
 
@@ -81,6 +85,17 @@ export class UserAuthService {
   getOrderHistory(userId: number | string): Observable<OrderModel[]> {
     let url = `/api/user/${userId}?populate=order_history`;
     return this.http.get<OrderModel[]>(url).map(result => new UserModel(result).order_history);
+  }
+
+  /**
+   * Dismiss an order
+   * @param {number | string} orderId
+   * @returns {Observable<OrderModel>}
+   */
+  dismissOrder(orderId: number | string): Observable<OrderModel> {
+    // TODO move to appropriate service. OrderService? depending on what the checkout ends up using
+    let url = `/api/order/${orderId}/dismiss`;
+    return this.http.post<OrderModel>(url, {});
   }
 
   /**
