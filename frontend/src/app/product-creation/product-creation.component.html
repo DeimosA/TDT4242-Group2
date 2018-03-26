@@ -3,8 +3,10 @@
 <div class="progress" *ngIf="loading">
   <div class="indeterminate"></div>
 </div>
-<div *ngIf="!loading && product" class="container">
+<div *ngIf="!loading && product" class="container row">
   <h2>{{product.id ? 'Edit' : 'Create new'}} product</h2>
+
+  <app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
 
   <form (ngSubmit)="saveProduct()" #productForm="ngForm">
 

@@ -97,11 +97,11 @@ Get the list of all users. Requires admin privileges.
 ```
 GET /api/user/:id?populate=order_history
 ```
-Get user details with order history for user with :id.
+Get user details with order history for user with `:id`.
 ```
 DELETE /api/user/:id
 ```
-Delete user with :id. Requires admin privileges.
+Delete user with `:id`. Requires admin privileges.
 ```
 POST /api/user/login
 ```
@@ -117,11 +117,11 @@ Get details for the currently logged in user, if any.
 ```
 POST /api/user/:id/makeadmin
 ```
-Give user with :id admin privileges. Requires admin privileges.
+Give user with `:id` admin privileges. Requires admin privileges.
 ```
 POST /api/user/:id/removeadmin
 ```
-Remove admin privileges from user with :id. Requires admin privileges.
+Remove admin privileges from user with `:id`. Requires admin privileges.
 
 ### Products
 ```
@@ -136,15 +136,15 @@ Requires admin privileges.
 ```
 GET /api/product/:id
 ```
-Get details for product with :id.
+Get details for product with `:id`.
 ```
 PUT /api/product/:id
 ```
-Update product with :id. Requires admin privileges.
+Update product with `:id`. Requires admin privileges.
 ```
 DELETE /api/product/:id
 ```
-Delete product with :id. Requires admin privileges.
+Delete product with `:id`. Requires admin privileges.
 
 ### Order
 ```
@@ -154,34 +154,44 @@ Get list of all user confirmed orders with user details. Requires admin privileg
 ```
 POST /api/order
 ```
-Place a new order. Should be an array of objects with `productId` and `quantity`. Orders must be confirmed after placing.  
+Place a new order. Should be an array of objects with `productId` and `quantity`. Orders must be confirmed after placing (Orders are currently forced confirmed until we maybe one day implement confirmation in frontend).  
 Returns a json response with order details like in the example below:
 
 <details><summary>Click to expand example</summary><pre>
 {
-    "products": [
+    "user": 1,
+    "total_price": 157.6,
+    "order_details": [
         {
             "product": {...},
             "quantity": 2,
-            "sum": 40.6
+            "line_price": 59.8
         },
         {
             "product": {...},
-            "quantity": 1,
-            "sum": 19
+            "quantity": 3,
+            "line_price": 97.8
         }
     ],
-    "totalPrice": 59.6,
-    "orderNumber": "TODO should be order ID",
-    "orderDate": "ISO date string"
+    "status": "PENDING",
+    "user_confirmed": false,
+    "createdAt": "2018-03-21T22:51:35.664Z",
+    "updatedAt": "2018-03-21T22:51:35.664Z",
+    "id": 3
 }
 </pre></details><br>
 
 ```
 POST /api/order/:id/confirm
 ```
-Confirm a placed order with :id.
+Confirm a placed order with `:id`.
 ```
 POST /api/order/:id/dismiss
 ```
-Dismiss a placed order with :id. Must be **not confirmed** or **confirmed with status PENDING**.
+Dismiss a placed order with `:id`. An order can not be dismissed if its status has changed from `PENDING`.
+```
+POST /api/order/:id/setstatus
+```
+Set the status of order with `:id` to one of; `ACCEPTED`, `AWAITING_RESUPPLY`, `SHIPPED` or `CANCELLED`. Requires admin privileges.
+
+Initial value is `PENDING`, but cannot be set back to `PENDING` after it has been changed.

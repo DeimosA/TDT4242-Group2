@@ -18,6 +18,7 @@ export class MypageComponent implements OnInit, OnDestroy {
   private currentUser: UserModel;
   private userAuthEventsSub: Subscription;
   private orderHistory: object[];
+  private alertMessage: string = '';
 
   constructor(
     private userAuthService: UserAuthService,
@@ -32,7 +33,7 @@ export class MypageComponent implements OnInit, OnDestroy {
           this.getOrderHistory();
         }
       }, error => {
-        alert('An error occurred. Try again later.')
+        this.alertMessage = 'An error occurred getting user data. Try again later';
       }
     );
   }

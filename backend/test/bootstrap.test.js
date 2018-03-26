@@ -9,7 +9,7 @@ before((done) => {
   sails.lift({
     // configuration for testing purposes
     models: {
-      connection: 'localDiskDb',
+      connection: 'testDiskDb',
       migrate: 'drop'
     }
   }, async (err, server) => {

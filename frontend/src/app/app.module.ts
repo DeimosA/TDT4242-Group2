@@ -26,6 +26,7 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { ShoppingCartListComponent } from './shopping-cart-list/shopping-cart-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { OrderHistoryListComponent } from './order-history-list/order-history-list.component';
+import { DismissibleAlertComponent } from './errors/dismissible-alert/dismissible-alert.component';
 
 /**
  * Initialize app and check if a user is logged in
@@ -55,7 +56,8 @@ function init_app(userAuthService: UserAuthService) {
     ShoppingCartComponent,
     ShoppingCartListComponent,
     ProductDetailsComponent,
-    OrderHistoryListComponent
+    OrderHistoryListComponent,
+    DismissibleAlertComponent,
   ],
   imports: [
     BrowserModule,

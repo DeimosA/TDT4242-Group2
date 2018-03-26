@@ -3,6 +3,8 @@
   <h2>{{currentUser.email}}</h2>
 </div>
 
+<app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
+
 <div *ngIf="!currentUser" class="section">
   <p>You must log in to view this page.</p>
 </div>
