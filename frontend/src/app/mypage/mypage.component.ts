@@ -51,8 +51,8 @@ export class MypageComponent implements OnInit, OnDestroy {
       result => {
         this.orderHistory = result;
       }, error => {
-        // TODO use fancy alert
-        alert('Error getting user history' + error.status);
+        this.orderHistory = null;
+        this.alertMessage = 'Error getting users order history: ' + error.status;
       }
     );
   }
@@ -65,8 +65,7 @@ export class MypageComponent implements OnInit, OnDestroy {
       (next) => {
         this.getOrderHistory();
       }, (error) => {
-        // TODO use fancy alert
-        alert('An error occurred cancelling your order. Try again later: ' + error.status);
+        this.alertMessage = 'An error occurred cancelling your order. Try again later: ' + error.status;
       }
     );
   }
