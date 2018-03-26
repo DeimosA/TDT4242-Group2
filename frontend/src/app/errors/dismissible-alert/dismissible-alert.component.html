@@ -1,0 +1,8 @@
+
+<div *ngIf="alertMessage" class="card-panel red-text red lighten-5 alert-dialogue">
+  <span>{{ alertMessage }}</span>
+  <button type="button" (click)="alertMessageChange.emit('')"
+          class="btn-floating waves-effect waves-light red">
+    <i class="material-icons">close</i>
+  </button>
+</div>

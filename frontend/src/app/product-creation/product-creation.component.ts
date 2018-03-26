@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/empty';
 
 import { ProductsService } from '../_shared/services/products.service';
 import { ProductModel } from "../_shared/app.models";
@@ -18,6 +19,7 @@ export class ProductCreationComponent implements OnInit {
   private loading: boolean = false;
   private product: ProductModel;
   private percent_sale: number;
+  private alertMessage: string = '';
 
   constructor(
     private productsService: ProductsService,
@@ -34,6 +36,7 @@ export class ProductCreationComponent implements OnInit {
         } else {
           // Not edit so create new
           this.product = <ProductModel>{};
+          return Observable.empty();
         }
       });
 
@@ -44,8 +47,11 @@ export class ProductCreationComponent implements OnInit {
       this.setPercentSale();
       setTimeout(() => Materialize.updateTextFields(), 5); // Fix to not have labels on top of input text
     }, error => {
-      if (error.status) alert('An error occurred loading the product details: ' + error.status);
-      // else console.log(error);
+      if (error.status) {
+        this.alertMessage = 'An error occurred loading the product details: ' + error.status;
+      } else {
+        console.log(error);
+      }
     });
   }
 
@@ -57,8 +63,15 @@ export class ProductCreationComponent implements OnInit {
       this.router.navigate(['/product', result.id]);
     }, error => {
       this.loading = false;
-      if (error.status) alert('An error occurred saving the product: ' + error.status);
-      console.log(error);
+      if (error.status === 400) {
+        this.alertMessage = 'Validation failed. Make sure product name does not already exist';
+      } else if (error.status === 401 || error.status === 403) {
+        this.alertMessage = 'You must be logged in as admin to create or update products';
+      } else if (error.status) {
+        this.alertMessage = 'An error occurred saving the product: ' + error.status;
+      } else {
+        console.log(error);
+      }
     });
   }
 

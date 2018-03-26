@@ -18,6 +18,7 @@
             />
             <label for="email" class="black-text" data-error="Not a valid e-mail address">e-mail</label>
           </div>
+
           <div class="input-field">
             <input
               type="password" id="password" name="password" required minlength="8" maxlength="72"
@@ -27,6 +28,9 @@
             />
             <label for="password" class="black-text" data-error="Minimum 8 characters">password</label>
           </div>
+
+          <app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
+
           <button type="submit" [disabled]="!loginForm.form.valid"
                   class="btn-flat green white-text waves-effect waves-light right login-button">Log in</button>
 

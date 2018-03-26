@@ -1,13 +1,18 @@
 
+<app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
+
 <div *ngIf="currentUser" class="row">
   <h2>{{currentUser.email}}</h2>
 </div>
+
 <div *ngIf="currentUser?.order_history" class="row">
   <h3>Order history</h3>
 </div>
+
 <div *ngIf="!currentUser">
   <p>You must log in to view this page.</p>
 </div>
+
 <div *ngIf="currentUser?.isAdmin" class="row">
   <h3>Admin</h3>
   <p>Navigate through the product pages to find and edit existing products or click the button below to create a new product</p>
