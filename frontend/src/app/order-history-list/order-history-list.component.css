@@ -17,11 +17,11 @@
 }
 
 .status-red {
-  color: red;
+  color: #F44336;
 }
 .status-yellow {
-  color: yellow;
+  color: orange;
 }
 .status-green {
-  color: green;
+  color: #4CAF50;
 }
