@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../_shared/services/products.service';
 import { ProductModel, SearchForm} from "../_shared/app.models";
 
+
+/**
+ * Shows the product filter and resulting product list
+ */
 @Component({
   selector: 'app-product-container',
   templateUrl: './product-container.component.html',

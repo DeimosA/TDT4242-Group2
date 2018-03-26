@@ -9,6 +9,7 @@ import { ProductModel } from "../_shared/app.models";
 
 declare let Materialize; // To recognize Materialize global
 
+
 /**
  * Creates a new or edits an existing product
  */

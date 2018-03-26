@@ -6,7 +6,7 @@ import { OrderModel } from '../app.models';
 
 
 /**
- * Order related services
+ * Order related queries
  */
 @Injectable()
 export class OrderService {
@@ -21,7 +21,7 @@ export class OrderService {
    * @returns {Observable<OrderModel>}
    */
   dismissOrder(orderId: number | string): Observable<OrderModel> {
-    let url = `/api/order/${orderId}/dismiss`;
+    const url = `/api/order/${orderId}/dismiss`;
     return this.http.post<OrderModel>(url, {});
   }
 

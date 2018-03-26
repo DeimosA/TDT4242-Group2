@@ -1,9 +1,14 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
-import { UserAuthService } from '../_shared/services/user-auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+
+import { UserAuthService } from '../_shared/services/user-auth.service';
 import { UserModel } from '../_shared/app.models';
 
+
+/**
+ * Page for inputting user credentials to log in a user
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

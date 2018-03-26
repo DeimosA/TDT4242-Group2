@@ -29,12 +29,11 @@ export class UserAuthService {
    * @returns {Observable<UserModel>}
    */
   login(email: string, password: string): Observable<UserModel> {
-    let body = {
+    const body = {
       email: email,
       password: password,
     };
-
-    let url = '/api/user/login';
+    const url = '/api/user/login';
     return this.http.post(url, body)
       .map(result => new UserModel(result))
       .do(result => this.userLoggedIn(result));
@@ -45,7 +44,7 @@ export class UserAuthService {
    * @returns {Observable<Object>}
    */
   logout(): Observable<object>{
-    let url = '/api/user/logout';
+    const url = '/api/user/logout';
     return this.http.post(url, {}).do(
       result => this.userLoggedOut(),
     );
@@ -58,11 +57,11 @@ export class UserAuthService {
    * @returns {Observable<Object>}
    */
   register(email: string, password: string): Observable<object>{
-    let body = {
+    const body = {
       email: email,
       password: password,
     };
-    let url = '/api/user';
+    const url = '/api/user';
     return this.http.post(url, body)
   }
 
@@ -71,7 +70,7 @@ export class UserAuthService {
    * @returns {Observable<UserModel>}
    */
   getCurrentUser(): Observable<UserModel> {
-    let url = '/api/user/current';
+    const url = '/api/user/current';
     return this.http.get(url)
       .map(result => new UserModel(result))
       .do(result => this.userLoggedIn(result));
@@ -83,7 +82,7 @@ export class UserAuthService {
    * @returns {Observable<object[]>}
    */
   getOrderHistory(userId: number | string): Observable<OrderModel[]> {
-    let url = `/api/user/${userId}?populate=order_history`;
+    const url = `/api/user/${userId}?populate=order_history`;
     return this.http.get<OrderModel[]>(url).map(result => new UserModel(result).order_history);
   }
 

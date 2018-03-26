@@ -2,6 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { ShoppingCartService } from '../_shared/services/shopping-cart.service';
 
+
+/**
+ * Lists the products provided in the productList input
+ */
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -22,9 +26,12 @@ export class ProductListComponent implements OnInit {
   ngOnInit() {
   }
 
-  addToCart(event, id, qty){
+  /**
+   * Add a product to the shopping cart
+   */
+  addToCart(event, id, quantity){
     // adding item ID to cart
-    this.shoppingCart.addItem(id, qty);
+    this.shoppingCart.addItem(id, quantity);
     event.preventDefault();
     event.stopPropagation();
   }
