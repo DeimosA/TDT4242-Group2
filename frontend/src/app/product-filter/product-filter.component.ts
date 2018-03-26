@@ -5,6 +5,10 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { SearchForm } from '../_shared/app.models';
 
+
+/**
+ * Side box for choosing search and filter criteria when listing products
+ */
 @Component({
   selector: 'app-product-filter',
   templateUrl: './product-filter.component.html',
@@ -36,6 +40,9 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
     this.formSubscription.unsubscribe();
   }
 
+  /**
+   * Clear the search and filter to its defaults
+   */
   private clearFilter() {
     this.formGroup.reset({
       search: '',

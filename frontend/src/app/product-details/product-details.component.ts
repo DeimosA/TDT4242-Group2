@@ -9,6 +9,10 @@ import { ProductModel, UserModel } from "../_shared/app.models";
 import { ShoppingCartService } from '../_shared/services/shopping-cart.service';
 import { UserAuthService } from "../_shared/services/user-auth.service";
 
+
+/**
+ * Details page for products
+ */
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
@@ -19,7 +23,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   private product: ProductModel;
   private user: UserModel;
   private userAuthEventsSub: Subscription;
-  private itemQTY: number;
+  private itemQuantity: number;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -36,21 +40,27 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.userAuthEventsSub = this.userAuthService.getUserAuthEvents().subscribe(user => {
       this.user = user;
     });
-    this.itemQTY = 1;
+    this.itemQuantity = 1;
   }
 
   ngOnDestroy() {
     this.userAuthEventsSub.unsubscribe();
   }
 
-  addToCart(id, qty){
+  /**
+   * Add product to shopping cart
+   */
+  addToCart(id, quantity){
     // adding item ID to cart
-    this.shoppingCart.addItem(id, qty);
+    this.shoppingCart.addItem(id, quantity);
   }
 
+  /**
+   * Change the quantity to add to the cart
+   */
   quantityChange(value){
     // unable to go below 1 item
-    this.itemQTY = Math.max(this.itemQTY + value, 1);
+    this.itemQuantity = Math.max(this.itemQuantity + value, 1);
   }
 
 }

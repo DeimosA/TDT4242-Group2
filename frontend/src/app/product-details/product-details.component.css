@@ -8,6 +8,7 @@
 }
 
 .image-wrapper {
+  width: 50%;
   overflow: hidden !important;
   display: inline-block;
 }

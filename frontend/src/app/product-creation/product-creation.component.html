@@ -12,7 +12,7 @@
 
     <div class="input-field">
       <input
-        type="text" id="product_name" name="product_name" required
+        type="text" id="product_name" name="product_name" autocomplete="off" required
         [(ngModel)]="product.name"
         #product_name="ngModel"
         class="validate"
@@ -52,12 +52,12 @@
 
     <div class="input-field">
       <input
-        type="number" id="product_stock_count" name="product_stock_count" required step="1" min="0"
+        type="number" id="product_stock_count" name="product_stock_count" step="1" min="0"
         [(ngModel)]="product.stock_count"
         #product_stock_count="ngModel"
         class="validate"
       />
-      <label for="product_stock_count">Stock (amount)</label>
+      <label for="product_stock_count">Stock (count)</label>
     </div>
 
     <!-- Sale type radio buttons -->

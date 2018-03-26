@@ -1,20 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { UserAuthService } from '../_shared/services/user-auth.service';
-import { UserModel } from '../_shared/app.models';
 
+
+/**
+ * Page for registering a new user
+ */
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
   providers: [],
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit {
 
-  private user: UserModel = null;
-  private userAuthEventsSub: Subscription;
   private userCredentials = {
     email: "",
     password: "",
@@ -27,17 +27,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // Subscribe to login and logout user auth events
-    this.userAuthEventsSub = this.userAuthService.getUserAuthEvents().subscribe(
-      user => {
-        this.user = user;
-      }
-    );
-  }
-
-  ngOnDestroy() {
-    // Un-subscribe from login and logout user auth events to avoid mem leaks
-    this.userAuthEventsSub.unsubscribe();
   }
 
   /**
@@ -47,14 +36,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.userAuthService.register(this.userCredentials.email, this.userCredentials.password).subscribe(res => {
       this.handleRegisterResult(201);
     }, err =>{
-      if (err.status) this.handleRegisterResult(err.status);
-      else console.log(err);
+      if (err.status) {
+        this.handleRegisterResult(err.status);
+      } else {
+        console.log(err);
+      }
     });
   }
 
   /**
    * Handle registering based on http result status code
-   * @param statusCode
    */
   private handleRegisterResult(statusCode){
     if(statusCode === 201){

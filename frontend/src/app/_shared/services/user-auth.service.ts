@@ -7,8 +7,12 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 
-import { UserModel } from "../app.models";
+import { UserModel, OrderModel } from "../app.models";
 
+
+/**
+ * User authentication and other user related queries
+ */
 @Injectable()
 export class UserAuthService {
 
@@ -25,12 +29,11 @@ export class UserAuthService {
    * @returns {Observable<UserModel>}
    */
   login(email: string, password: string): Observable<UserModel> {
-    let body = {
+    const body = {
       email: email,
       password: password,
     };
-
-    let url = '/api/user/login';
+    const url = '/api/user/login';
     return this.http.post(url, body)
       .map(result => new UserModel(result))
       .do(result => this.userLoggedIn(result));
@@ -41,7 +44,7 @@ export class UserAuthService {
    * @returns {Observable<Object>}
    */
   logout(): Observable<object>{
-    let url = '/api/user/logout';
+    const url = '/api/user/logout';
     return this.http.post(url, {}).do(
       result => this.userLoggedOut(),
     );
@@ -54,23 +57,33 @@ export class UserAuthService {
    * @returns {Observable<Object>}
    */
   register(email: string, password: string): Observable<object>{
-    let body = {
+    const body = {
       email: email,
       password: password,
     };
-    let url = '/api/user';
+    const url = '/api/user';
     return this.http.post(url, body)
   }
 
   /**
-   * Get the currently logged in user, either from locally stored object or from backend
+   * Get the currently logged in user, if any
    * @returns {Observable<UserModel>}
    */
   getCurrentUser(): Observable<UserModel> {
-    let url = '/api/user/current';
+    const url = '/api/user/current';
     return this.http.get(url)
       .map(result => new UserModel(result))
       .do(result => this.userLoggedIn(result));
+  }
+
+  /**
+   * Get a users order history
+   * @param {number | string} userId
+   * @returns {Observable<object[]>}
+   */
+  getOrderHistory(userId: number | string): Observable<OrderModel[]> {
+    const url = `/api/user/${userId}?populate=order_history`;
+    return this.http.get<OrderModel[]>(url).map(result => new UserModel(result).order_history);
   }
 
   /**
@@ -80,7 +93,6 @@ export class UserAuthService {
   getUserAuthEvents(): Observable<UserModel> {
     return this.userAuthEvents.asObservable();
   }
-
 
   /**
    * Stuff to do when a user logs in

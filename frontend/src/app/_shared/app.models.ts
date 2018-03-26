@@ -5,15 +5,21 @@ import { Observable } from "rxjs/Observable";
  */
 class UserModel{
 
-  id: number;
+  id: number | string;
   email: string;
   isAdmin: boolean;
+  order_history: OrderModel[];
 
   constructor(user) {
-    if (user.hasOwnProperty('id') && user.hasOwnProperty('email') && user.hasOwnProperty('isAdmin')) {
+    if ( (typeof user.id === 'number' || typeof user.id === 'string') && user.id &&
+        typeof user.email === 'string' && user.email &&
+        typeof user.isAdmin === 'boolean' ) {
+
       this.id = user.id;
       this.email = user.email;
       this.isAdmin = user.isAdmin;
+      if (user.order_history) {this.order_history = user.order_history}
+
     } else {
       throw new Error('Not a valid user object');
     }
@@ -69,6 +75,9 @@ class ShoppingCartItem{
   }
 }
 
+/**
+ * Product search and filter
+ */
 interface SearchForm {
   search: string;
   sort: string;
@@ -76,4 +85,16 @@ interface SearchForm {
   maxPrice: number;
 }
 
-export {UserModel, ProductModel, ShoppingCartItem, SearchForm}
+/**
+ * Order details
+ */
+interface OrderModel {
+  id: number | string;
+  user: any;
+  total_price: number;
+  status: string;
+  user_confirmed: boolean;
+  order_details: object[];
+}
+
+export { UserModel, ProductModel, ShoppingCartItem, SearchForm, OrderModel }

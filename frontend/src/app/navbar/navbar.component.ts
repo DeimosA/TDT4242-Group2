@@ -6,6 +6,10 @@ import { UserModel, ProductModel, ShoppingCartItem } from '../_shared/app.models
 import { UserAuthService } from "../_shared/services/user-auth.service";
 import { ShoppingCartService } from "../_shared/services/shopping-cart.service";
 
+
+/**
+ * Shows the title and navigation bar
+ */
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',

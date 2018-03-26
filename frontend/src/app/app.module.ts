@@ -9,6 +9,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { UserAuthService } from "./_shared/services/user-auth.service";
 import { ProductsService } from "./_shared/services/products.service";
 import { ShoppingCartService } from './_shared/services/shopping-cart.service';
+import { OrderService } from './_shared/services/order.service';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -25,6 +26,7 @@ import { ProductFilterComponent } from './product-filter/product-filter.componen
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { ShoppingCartListComponent } from './shopping-cart-list/shopping-cart-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
+import { OrderHistoryListComponent } from './order-history-list/order-history-list.component';
 import { DismissibleAlertComponent } from './errors/dismissible-alert/dismissible-alert.component';
 
 /**
@@ -55,7 +57,8 @@ function init_app(userAuthService: UserAuthService) {
     ShoppingCartComponent,
     ShoppingCartListComponent,
     ProductDetailsComponent,
-    DismissibleAlertComponent
+    OrderHistoryListComponent,
+    DismissibleAlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +74,7 @@ function init_app(userAuthService: UserAuthService) {
     UserAuthService,
     ProductsService,
     ShoppingCartService,
+    OrderService,
     {
       provide: APP_INITIALIZER,
       useFactory: init_app,
