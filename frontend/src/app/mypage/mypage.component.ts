@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { UserAuthService } from '../_shared/services/user-auth.service';
+import { OrderService } from '../_shared/services/order.service';
 import { OrderModel, UserModel } from '../_shared/app.models';
 
 
@@ -22,6 +23,7 @@ export class MypageComponent implements OnInit, OnDestroy {
 
   constructor(
     private userAuthService: UserAuthService,
+    private orderService: OrderService,
   ) { }
 
   ngOnInit() {
@@ -61,7 +63,7 @@ export class MypageComponent implements OnInit, OnDestroy {
    * Dismiss an order
    */
   private dismissOrder(order: OrderModel) {
-    this.userAuthService.dismissOrder(order.id).subscribe(
+    this.orderService.dismissOrder(order.id).subscribe(
       (next) => {
         this.getOrderHistory();
       }, (error) => {

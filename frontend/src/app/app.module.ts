@@ -9,6 +9,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { UserAuthService } from "./_shared/services/user-auth.service";
 import { ProductsService } from "./_shared/services/products.service";
 import { ShoppingCartService } from './_shared/services/shopping-cart.service';
+import { OrderService } from './_shared/services/order.service';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -73,6 +74,7 @@ function init_app(userAuthService: UserAuthService) {
     UserAuthService,
     ProductsService,
     ShoppingCartService,
+    OrderService,
     {
       provide: APP_INITIALIZER,
       useFactory: init_app,

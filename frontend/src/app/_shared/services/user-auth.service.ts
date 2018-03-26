@@ -88,24 +88,12 @@ export class UserAuthService {
   }
 
   /**
-   * Dismiss an order
-   * @param {number | string} orderId
-   * @returns {Observable<OrderModel>}
-   */
-  dismissOrder(orderId: number | string): Observable<OrderModel> {
-    // TODO move to appropriate service. OrderService? depending on what the checkout ends up using
-    let url = `/api/order/${orderId}/dismiss`;
-    return this.http.post<OrderModel>(url, {});
-  }
-
-  /**
    * Return an observable that can be subscribed to and listen for login or logout events
    * @returns {Observable<Object>}
    */
   getUserAuthEvents(): Observable<UserModel> {
     return this.userAuthEvents.asObservable();
   }
-
 
   /**
    * Stuff to do when a user logs in
