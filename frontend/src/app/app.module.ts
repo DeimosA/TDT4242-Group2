@@ -3,7 +3,6 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterializeModule } from 'angular2-materialize';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { UserAuthService } from "./_shared/services/user-auth.service";
@@ -11,12 +10,12 @@ import { ProductsService } from "./_shared/services/products.service";
 import { ShoppingCartService } from './_shared/services/shopping-cart.service';
 import { OrderService } from './_shared/services/order.service';
 
-import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { SharedModule } from './_shared/shared.module';
+import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import { MypageComponent } from './mypage/mypage.component';
 import { ProductCreationComponent } from './product-creation/product-creation.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { DealsComponent } from './deals/deals.component';
@@ -26,20 +25,7 @@ import { ProductFilterComponent } from './product-filter/product-filter.componen
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { ShoppingCartListComponent } from './shopping-cart-list/shopping-cart-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
-import { OrderHistoryListComponent } from './order-history-list/order-history-list.component';
-import { DismissibleAlertComponent } from './errors/dismissible-alert/dismissible-alert.component';
 
-/**
- * Initialize app and check if a user is logged in
- * @param {UserAuthService} userAuthService
- * @returns {() => Promise<any>}
- */
-function init_app(userAuthService: UserAuthService) {
-  return () => {
-    userAuthService.getCurrentUser().subscribe(next => {});
-    return Promise.resolve({});
-  }
-}
 
 @NgModule({
   declarations: [
@@ -47,7 +33,6 @@ function init_app(userAuthService: UserAuthService) {
     NavbarComponent,
     RegisterComponent,
     LoginComponent,
-    MypageComponent,
     NotFoundComponent,
     ProductCreationComponent,
     DealsComponent,
@@ -57,18 +42,16 @@ function init_app(userAuthService: UserAuthService) {
     ShoppingCartComponent,
     ShoppingCartListComponent,
     ProductDetailsComponent,
-    OrderHistoryListComponent,
-    DismissibleAlertComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MaterializeModule,
     BrowserAnimationsModule,
     InfiniteScrollModule,
+    SharedModule,
+    AppRoutingModule,
   ],
   providers: [
     UserAuthService,
@@ -77,7 +60,13 @@ function init_app(userAuthService: UserAuthService) {
     OrderService,
     {
       provide: APP_INITIALIZER,
-      useFactory: init_app,
+      useFactory: (userAuthService: UserAuthService) => {
+        return () => {
+          // Check if a user is already logged in on app initialization
+          userAuthService.getCurrentUser().subscribe(next => {});
+          return Promise.resolve({});
+        }
+      },
       deps: [UserAuthService],
       multi: true,
     },

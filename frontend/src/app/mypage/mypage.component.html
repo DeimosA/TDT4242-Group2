@@ -12,7 +12,7 @@
 <div *ngIf="currentUser?.isAdmin" class="section">
   <h3>Admin</h3>
   <p>Navigate through the product pages to find and edit existing products or click the button below to create a new product</p>
-  <p><a routerLink="/products/new" class="btn waves-effect waves-light">Create new product</a></p>
+  <a routerLink="/products/new" class="btn waves-effect waves-light">Create new product</a>
 </div>
 
 <div *ngIf="orderHistory?.length > 0" class="section">

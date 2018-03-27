@@ -1,0 +1,18 @@
+
+.admin-tabs {
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.tabs-fixed-width {
+  max-width: 50%;
+}
+
+li.tab a {
+  color: #5975ff;
+}
+
+li.tab a.active,
+li.tab a:hover {
+  color: #4053b3;
+}

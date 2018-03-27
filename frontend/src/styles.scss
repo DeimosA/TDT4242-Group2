@@ -1,6 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
+@import '~materialize-css/sass/components/_color.scss';
+$roboto-font-path: "~materialize-css/dist/fonts/roboto/";
+//$tabs-bg-color: #eee !important;
+$tabs-underline-color: #e8eaf6 !important;
+@import "~materialize-css/sass/materialize.scss";
+
 html {
   line-height: 1.15;
 }

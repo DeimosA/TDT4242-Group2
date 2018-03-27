@@ -30,7 +30,7 @@ class UserModel{
  * Product details
  */
 interface ProductModel{
-  id: number;
+  id: number | string;
   name: string;
   price: number;
   description: string;
