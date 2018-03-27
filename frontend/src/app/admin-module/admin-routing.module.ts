@@ -8,6 +8,9 @@ import { UserListComponent } from './user-list/user-list.component';
 import { MypageComponent } from '../mypage/mypage.component';
 
 
+/**
+ * Relative routes for the admin sub-module
+ */
 const routes: Routes = [
   {
     path: '',

@@ -14,6 +14,9 @@ import { ProductDetailsComponent } from "./product-details/product-details.compo
 import { AdminModule } from './admin-module/admin.module'; // Shouldn't be necessary?
 
 
+/**
+ * App root navigation routes
+ */
 const appRoutes: Routes = [
   {
     path: '',

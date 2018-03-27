@@ -27,6 +27,9 @@ import { ShoppingCartListComponent } from './shopping-cart-list/shopping-cart-li
 import { ProductDetailsComponent } from './product-details/product-details.component';
 
 
+/**
+ * Root app module
+ */
 @NgModule({
   declarations: [
     AppComponent,
