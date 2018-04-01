@@ -30,7 +30,7 @@ export class OrderService {
    * @returns {Observable<OrderModel[]>}
    */
   getAllOrders(): Observable<OrderModel[]> {
-    const url = '/api/order?limit=100';
+    const url = '/api/order?limit=100&sort=createdAt DESC&where={"user_confirmed":true}';
     return this.http.get<OrderModel[]>(url);
   }
 
