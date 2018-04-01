@@ -6,9 +6,10 @@
       <div>
         Order status:
         <span [ngClass]="{
-          'status-red': order.status === 'PENDING' || order.status === 'CANCELLED',
+          'status-red': order.status === 'PENDING',
           'status-yellow': order.status === 'ACCEPTED' || order.status === 'AWAITING_RESUPPLY',
-          'status-green': order.status === 'SHIPPED'
+          'status-green': order.status === 'SHIPPED',
+          'status-gray': order.status === 'CANCELLED'
         }">
           {{ order.status }}
         </span>

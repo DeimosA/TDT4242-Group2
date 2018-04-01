@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { OrderModel } from '../../_shared/app.models';
 import { OrderService } from '../../_shared/services/order.service';
 
+
+/**
+ * Lists all orders that have been placed and confirmed by users
+ */
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',

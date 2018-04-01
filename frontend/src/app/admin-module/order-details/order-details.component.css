@@ -1,0 +1,32 @@
+
+.change-status {
+  display: flex;
+  align-items: center;
+}
+
+.change-status > button {
+  margin-left: 20px;
+}
+
+.order-overview td {
+  padding: 0;
+}
+.order-overview td:first-child {
+  width: 175px;
+}
+.order-overview h3 {
+  margin-bottom: 0;
+}
+
+.status-red {
+  color: #F44336;
+}
+.status-yellow {
+  color: orange;
+}
+.status-green {
+  color: #4CAF50;
+}
+.status-gray {
+  color: #888888;
+}

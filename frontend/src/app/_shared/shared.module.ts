@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterializeModule } from 'angular2-materialize'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MypageComponent } from '../mypage/mypage.component';
 import { DismissibleAlertComponent } from '../errors/dismissible-alert/dismissible-alert.component';
@@ -19,6 +20,8 @@ import { OrderHistoryListComponent } from '../order-history-list/order-history-l
     CommonModule,
     RouterModule,
     MaterializeModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     MypageComponent,
@@ -31,6 +34,8 @@ import { OrderHistoryListComponent } from '../order-history-list/order-history-l
     OrderHistoryListComponent,
     CommonModule,
     MaterializeModule,
+    FormsModule,
+    ReactiveFormsModule,
   ]
 })
 export class SharedModule { }

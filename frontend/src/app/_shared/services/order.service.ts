@@ -30,7 +30,7 @@ export class OrderService {
    * @returns {Observable<OrderModel[]>}
    */
   getAllOrders(): Observable<OrderModel[]> {
-    const url = '/api/order?limit=100&sort=createdAt DESC&where={"user_confirmed":true}';
+    const url = '/api/order?user_confirmed=true&limit=100&sort=createdAt DESC';
     return this.http.get<OrderModel[]>(url);
   }
 
@@ -40,7 +40,7 @@ export class OrderService {
    * @returns {Observable<OrderModel>}
    */
   getOrderDetails(orderId: number | string): Observable<OrderModel> {
-    const url = `/api/order/${orderId}`;
+    const url = `/api/order/${orderId}?populate=user`;
     return this.http.get<OrderModel>(url);
   }
 

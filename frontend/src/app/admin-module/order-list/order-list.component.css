@@ -6,7 +6,7 @@
 }
 
 .orderLink > div {
-  min-width: 25%;
+  min-width: 30%;
 }
 
 .orderLink > div:nth-child(2) { text-align: center; }
@@ -19,11 +19,12 @@
 .status-red {
   color: #F44336;
 }
-
 .status-yellow {
   color: orange;
 }
-
 .status-green {
   color: #4CAF50;
+}
+.status-gray {
+  color: #888888;
 }
