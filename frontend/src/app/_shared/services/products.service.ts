@@ -63,7 +63,7 @@ export class ProductsService {
    * Get all products that are on sale
    */
   getSaleProducts(): Observable<ProductModel[]> {
-    const url = '/api/product?listed=true&where={"on_sale":{"!":"NO_SALE"}}';
+    const url = '/api/product?listed=true&where={"on_sale":{"!":"NO_SALE"}}&limit=100';
     return this.getProducts(url);
   }
 
