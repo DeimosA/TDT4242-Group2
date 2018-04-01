@@ -11,6 +11,12 @@ import { ProductContainerComponent } from "./product-container/product-container
 import { ShoppingCartComponent } from "./shopping-cart/shopping-cart.component";
 import { ProductDetailsComponent } from "./product-details/product-details.component";
 
+import { AdminModule } from './admin-module/admin.module'; // Shouldn't be necessary?
+
+
+/**
+ * App root navigation routes
+ */
 const appRoutes: Routes = [
   {
     path: '',
@@ -50,7 +56,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'admin',
-    component: MypageComponent,
+    loadChildren: 'app/admin-module/admin.module#AdminModule',
   },
 
   // Keep last
@@ -61,11 +67,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(appRoutes)
-  ],
-  exports: [
-    RouterModule
-  ]
+  imports: [RouterModule.forRoot(appRoutes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

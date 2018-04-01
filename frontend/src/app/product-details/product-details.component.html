@@ -41,7 +41,7 @@
             <button (click)="quantityChange(-1)" type="button" class="btn-floating waves-effect">
               <i class="material-icons">remove</i>
             </button>
-            x{{ itemQTY }}
+            x{{ itemQuantity }}
             <button (click)="quantityChange(1)" type="button" class="btn-floating waves-effect">
               <i class="material-icons">add</i>
             </button>
@@ -50,12 +50,12 @@
               Not on storage. Check back later.
             </p>
             <p *ngIf="product.stock_count > 0">
-              {{ product.stock_count }} on storage! 
+              {{ product.stock_count }} on storage!
             </p>
           </div>
 
           <div class="card-action">
-            <button type="button" class="waves-effect waves-light btn" (click)="addToCart(product.id, itemQTY)">Add {{itemQTY}} cart</button>
+            <button type="button" class="waves-effect waves-light btn" (click)="addToCart(product.id, itemQuantity)">Add {{itemQuantity}} to cart</button>
             <button *ngIf="product.on_sale === 'PACKAGE'" type="button" class="waves-effect waves-light btn" (click)="addToCart(product.id, product.package_get_count)">Add {{product.package_get_count}} to cart</button>
           </div>
         </div>
