@@ -20,11 +20,12 @@ import { UserAuthService } from "../_shared/services/user-auth.service";
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
 
-  private product: ProductModel;
-  private user: UserModel;
-  private userAuthEventsSub: Subscription;
-  private itemQuantity: number;
+  public product: ProductModel;
+  public itemQuantity: number;
 
+  private userAuthEventsSub: Subscription;
+  private user: UserModel;
+  
   constructor(
     private activatedRoute: ActivatedRoute,
     private productsService: ProductsService,

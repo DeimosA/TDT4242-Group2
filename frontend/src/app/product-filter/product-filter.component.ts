@@ -16,17 +16,17 @@ import { SearchForm } from '../_shared/app.models';
 })
 export class ProductFilterComponent implements OnInit, OnDestroy {
 
-  private formGroup : FormGroup = new FormGroup({
+  public formGroup : FormGroup = new FormGroup({
     search: new FormControl(''),
     sort: new FormControl('name ASC'),
     minPrice: new FormControl(0, Validators.min(0)),
     maxPrice: new FormControl(Infinity, Validators.min(0))
   });
 
-  private formSubscription : Subscription;
-
   @Output()
-  private search_form = new EventEmitter<SearchForm>();
+  public search_form = new EventEmitter<SearchForm>();
+
+  private formSubscription : Subscription;
 
   constructor() { }
 
@@ -43,7 +43,7 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
   /**
    * Clear the search and filter to its defaults
    */
-  private clearFilter() {
+  public clearFilter() {
     this.formGroup.reset({
       search: '',
       sort: 'name ASC',
