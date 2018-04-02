@@ -8,7 +8,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:9.6.1
-    working_directory: ~/repo/backend
+    working_directory: ~/repo
 
     steps:
       - checkout
@@ -23,7 +23,7 @@ jobs:
   test:
     docker:
       - image: circleci/node:9.6.1
-    working_directory: ~/repo/backend
+    working_directory: ~/repo
     
     steps:
       - checkout
@@ -35,7 +35,7 @@ jobs:
   deploy:
     docker:
       - image: circleci/node:9.6.1
-    working_directory: ~/repo/backend
+    working_directory: ~/repo
 
     steps:
       - checkout
@@ -66,4 +66,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - heroku-deploy
