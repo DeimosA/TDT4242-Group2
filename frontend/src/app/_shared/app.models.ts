@@ -90,7 +90,7 @@ interface SearchForm {
  */
 interface OrderModel {
   id: number | string;
-  user: any;
+  user: UserModel;
   total_price: number;
   status: string;
   user_confirmed: boolean;

@@ -87,6 +87,25 @@ export class UserAuthService {
   }
 
   /**
+   * Get all the users and their details
+   * @returns {Observable<UserModel[]>}
+   */
+  getAllUsers(): Observable<UserModel[]> {
+    const url = '/api/user?limit=100';
+    return this.http.get<UserModel[]>(url);
+  }
+
+  /**
+   * Toggle a users admin status
+   * @param {UserModel} user
+   * @returns {Observable<UserModel>}
+   */
+  toggleAdmin(user: UserModel): Observable<UserModel> {
+    const url = `/api/user/${user.id}/${user.isAdmin ? 'removeadmin' : 'makeadmin'}`;
+    return this.http.post<UserModel>(url, {});
+  }
+
+  /**
    * Return an observable that can be subscribed to and listen for login or logout events
    * @returns {Observable<Object>}
    */

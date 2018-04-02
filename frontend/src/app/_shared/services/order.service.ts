@@ -25,4 +25,34 @@ export class OrderService {
     return this.http.post<OrderModel>(url, {});
   }
 
+  /**
+   * Get ALL the orders
+   * @returns {Observable<OrderModel[]>}
+   */
+  getAllOrders(): Observable<OrderModel[]> {
+    const url = '/api/order?user_confirmed=true&limit=100&sort=createdAt DESC';
+    return this.http.get<OrderModel[]>(url);
+  }
+
+  /**
+   * Get details for a specific order
+   * @param {number | string} orderId
+   * @returns {Observable<OrderModel>}
+   */
+  getOrderDetails(orderId: number | string): Observable<OrderModel> {
+    const url = `/api/order/${orderId}?populate=user`;
+    return this.http.get<OrderModel>(url);
+  }
+
+  /**
+   * Change the status of an order
+   * @param {OrderModel} order
+   * @param {string} newStatus
+   * @returns {Observable<OrderModel>}
+   */
+  setOrderStatus(order: OrderModel, newStatus: string): Observable<OrderModel> {
+    const url = `/api/order/${order.id}/setstatus`;
+    return this.http.post<OrderModel>(url, { status: newStatus });
+  }
+
 }

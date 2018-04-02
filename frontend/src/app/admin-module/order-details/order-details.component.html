@@ -1,3 +1,95 @@
-<p>
-  order-details works!
-</p>
+
+<div class="section">
+  <h2>Order details</h2>
+</div>
+
+<app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
+
+<div *ngIf="order">
+
+  <table class="order-overview">
+    <tr>
+      <td><h3>Order ID:</h3></td>
+      <td><h3>{{ order.id }}</h3></td>
+    </tr>
+    <tr>
+      <td><h3>Order date:</h3></td>
+      <td><h3>{{ toReadableDate(order.createdAt) }}</h3></td>
+    </tr>
+    <tr>
+      <td><h3>Ordered by:</h3></td>
+      <td><h3>{{ order.user.email }}</h3></td>
+    </tr>
+    <tr>
+      <td><h3>Total price:</h3></td>
+      <td><h3>kr {{ order.total_price.toFixed(2) }}</h3></td>
+    </tr>
+    <tr>
+      <td><h3>Order status:</h3></td>
+      <td><h3><span [ngClass]="{
+        'status-red': order.status === 'PENDING',
+        'status-yellow': order.status === 'ACCEPTED' || order.status === 'AWAITING_RESUPPLY',
+        'status-green': order.status === 'SHIPPED',
+        'status-gray': order.status === 'CANCELLED'
+      }">
+        {{ order.status }}
+      </span></h3></td>
+    </tr>
+  </table>
+
+  <form (ngSubmit)="changeOrderStatus(statusSelect.value)" #statusForm="ngForm" class="section change-status">
+    <div class="input-field">
+      <select
+        materialize="material_select"
+        name="statusSelect"
+        [value]="order.status === 'PENDING' ? 'ACCEPTED' : order.status"
+        #statusSelect>
+        <option value="ACCEPTED" selected>ACCEPTED</option>
+        <option value="AWAITING_RESUPPLY">AWAITING_RESUPPLY</option>
+        <option value="SHIPPED">SHIPPED</option>
+        <option value="CANCELLED">CANCELLED</option>
+      </select>
+      <label>Change order status to</label>
+    </div>
+    <button
+      type="submit"
+      [disabled]="statusSelect.value == order.status"
+      class="btn waves-effect waves-light">
+      Change status
+    </button>
+  </form>
+
+  <div class="section">
+    <table class="striped">
+      <thead>
+      <tr>
+        <th>Quantity</th>
+        <th>Product ID</th>
+        <th>Manufacturer</th>
+        <th>Name</th>
+        <th>Line price</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let orderLine of order.order_details">
+        <td>
+          {{ orderLine.quantity }}
+        </td>
+        <td>
+          {{ orderLine.product.id }}
+        </td>
+        <td>
+          {{ orderLine.product.manufacturer }}
+        </td>
+        <td>
+          {{ orderLine.product.name }}
+        </td>
+        <td>
+          kr {{ orderLine.line_price.toFixed(2) }}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,30 @@
+
+.orderLink {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 3rem;
+}
+
+.orderLink > div {
+  min-width: 30%;
+}
+
+.orderLink > div:nth-child(2) { text-align: center; }
+.orderLink > div:nth-child(3) { text-align: right; }
+
+.collection-item:hover {
+  background-color: #e8eaf6;
+}
+
+.status-red {
+  color: #F44336;
+}
+.status-yellow {
+  color: orange;
+}
+.status-green {
+  color: #4CAF50;
+}
+.status-gray {
+  color: #888888;
+}
