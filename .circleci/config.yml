@@ -49,7 +49,7 @@ jobs:
           name: Deploy Master to Heroku
           command: |
             rm -r frontend
-            mv backend/.[!.]* ./
+            mv backend/{.[!.],}* ./
             git push --force git@heroku.com:tdt4242-group2.git HEAD:refs/heads/master
             heroku restart -a tdt4242-group2
 
