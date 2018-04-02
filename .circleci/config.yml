@@ -49,7 +49,7 @@ jobs:
           name: Build Angular
           command: |
             cd frontend
-            npm i @angular/cli
+            yarn install
             node_modules/.bin/ng build --prod -op ../backend/assets
       - run:
           name: Deploy Master to Heroku
