@@ -39,12 +39,12 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Run setup script
-          command: bash .circleci/setup-heroku.sh
       - add_ssh_keys:
           fingerprints:
             - "SHA256:G9r3ZDt/S1SeC4HfgZiJAZ5SPoCx261JbMZSsmlVyJc K@ASUS-K"
+      - run:
+          name: Run setup script
+          command: bash .circleci/setup-heroku.sh
       - run:
           name: Build Angular
           command: |
