@@ -49,7 +49,7 @@ jobs:
           name: Build Angular
           command: |
             cd frontend
-            sudo npm i -g @angular/cli
+            npm i @angular/cli
             ng build --prod -op ../backend/assets
       - run:
           name: Deploy Master to Heroku
