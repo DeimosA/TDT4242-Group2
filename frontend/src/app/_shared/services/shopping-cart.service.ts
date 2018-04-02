@@ -34,8 +34,8 @@ export class ShoppingCartService {
     this.updateAndNotify();
   }
 
-  private findItem(id: number){
-    return this.cart.filter((e) => e.productId == id)[0];
+  private findItem(id: number) : ShoppingCartItem{
+    return this.cart.find((e) => e.productId == id);
   }
 
 
