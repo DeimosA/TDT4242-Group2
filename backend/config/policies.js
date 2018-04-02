@@ -81,6 +81,11 @@ module.exports.policies = {
     confirm: 'sessionAuth',
     dismiss: 'sessionAuth',
     setStatus: 'isAdmin',
-  }
+  },
+
+  IndexController: {
+    '*': false,
+    index: true,
+  },
 
 };
