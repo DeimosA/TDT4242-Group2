@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-import { OrderModel } from '../app.models';
+import { OrderModel, ShoppingCartItem } from '../app.models';
 
 
 /**
@@ -14,6 +14,16 @@ export class OrderService {
   constructor(
     private http: HttpClient,
   ) { }
+
+  createOrder(items: Array<ShoppingCartItem>): Observable<OrderModel> {
+    const url = `/api/order`;
+    return this.http.post<OrderModel>(url, items.map((item : ShoppingCartItem) => {
+      return {
+        productId: item.productId,
+        quantity: item.quantity
+      }
+    }));
+  }
 
   /**
    * Dismiss an order

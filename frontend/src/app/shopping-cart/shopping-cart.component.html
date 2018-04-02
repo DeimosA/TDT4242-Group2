@@ -4,7 +4,9 @@
 <app-shopping-cart-list
   [items]="items"
   (itemDelete)="deleteItem($event)"
-  (itemChange)="changeItem($event)">
+  (itemChange)="changeItem($event)"
+  (totalPriceChange)="changePrice($event)"
+  >
 </app-shopping-cart-list>
 
 <div class="flow-text cart-actions">
@@ -13,5 +15,5 @@
   <div>
     Total price: kr {{ totalPrice() }}
   </div>
-  <button type="button" (click)="checkout()" class="waves-effect waves-light btn">Checkout cart</button>
+  <button [disabled]="items.length <= 0" type="button" (click)="checkout()" class="waves-effect waves-light btn">Checkout cart</button>
 </div>

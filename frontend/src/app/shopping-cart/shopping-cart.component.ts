@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { Subscription } from 'rxjs/Subscription';
 
 import { ShoppingCartService } from '../_shared/services/shopping-cart.service';
-import { ShoppingCartItem } from '../_shared/app.models';
+import { OrderService } from '../_shared/services/order.service';
+
+import { ShoppingCartItem, OrderModel } from '../_shared/app.models';
 
 
 @Component({
@@ -12,9 +16,11 @@ import { ShoppingCartItem } from '../_shared/app.models';
 })
 export class ShoppingCartComponent implements OnInit {
 
-  items : Array<ShoppingCartItem> = [];
+  private items : Array<ShoppingCartItem> = [];
   private shoppingCartSub : Subscription;
-  constructor(private shoppingCart : ShoppingCartService) { }
+  protected _totalPrice : number = 0;
+
+  constructor(private shoppingCart : ShoppingCartService, private orderService : OrderService, private router : Router) { }
 
   ngOnInit() {
     this.shoppingCartSub = this.shoppingCart.getShoppingCart().subscribe((items : Array<ShoppingCartItem>) => {
@@ -34,11 +40,21 @@ export class ShoppingCartComponent implements OnInit {
     this.shoppingCart.updateItem(item);
   }
 
+  private changePrice(price: number){
+    console.log(price);
+    this._totalPrice = price;
+  }
+
   private totalPrice(): number {
-    return 0; // todo
+    return this._totalPrice;
   }
 
   private checkout() {
+    this.orderService.createOrder(this.items).subscribe( (order : OrderModel) => {
+      console.log(order);
+      this.shoppingCart.clearCart();
+      this.router.navigate(['/mypage']);
+    });
     return; // todo
   }
 

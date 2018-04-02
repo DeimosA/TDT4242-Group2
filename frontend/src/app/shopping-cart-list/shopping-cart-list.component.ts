@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 
 import { ShoppingCartItem, ProductModel } from '../_shared/app.models';
 
-
 @Component({
   selector: 'app-shopping-cart-list',
   templateUrl: './shopping-cart-list.component.html',
@@ -14,6 +13,9 @@ export class ShoppingCartListComponent implements OnChanges {
 
   @Input("items")
   private cartList : Array<ShoppingCartItem> = [];
+
+  @Output("totalPriceChange")
+  private totalPriceEmitter = new EventEmitter<number>();
 
   @Output("itemChange")
   private itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
@@ -38,17 +40,25 @@ export class ShoppingCartListComponent implements OnChanges {
         }
         return true;
       })
-      .forEach(item => item.product.subscribe(
-        (product : ProductModel) => {
-          this.loadedCount++;
-          this.products[item.productId] = product
-        } )
-      );
+      .forEach(item => {
+        item.product.subscribe(
+          (product : ProductModel) => {
+            this.loadedCount++;
+            this.products[item.productId] = product;
+            if(this.loadedCount >= this.cartList.length) {
+              // Once all products are loaded update the price
+              console.log("Emit", this.totalPrice());
+              this.totalPriceEmitter.emit(this.totalPrice());
+            }
+          }
+        );
+      });
   }
 
   private updateQty(event, item : ShoppingCartItem, diff : number) {
     item.quantity += diff;
     this.itemQtyEmitter.emit(item);
+    this.totalPriceEmitter.emit(this.totalPrice());
     event.preventDefault();
     event.stopPropagation();
   }
@@ -67,7 +77,7 @@ export class ShoppingCartListComponent implements OnChanges {
     return this.products[item.productId];
   }
 
-  private totalCount(){
+  private totalCount() : number{
     let count = 0;
     this.cartList.forEach((item) => {
       count += item.quantity 
@@ -75,11 +85,13 @@ export class ShoppingCartListComponent implements OnChanges {
     return count;
   }
 
-  private totalPrice(){
+  private totalPrice() : number{
     let totalPrice = 0;
     this.cartList.forEach((item) => {
       const product = this.products[item.productId];
-      totalPrice += product.price * item.quantity;   
+      if(product){
+        totalPrice += product.price * item.quantity;   
+      }
     });
     return totalPrice;
   }
