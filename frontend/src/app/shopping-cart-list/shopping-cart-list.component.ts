@@ -88,12 +88,17 @@ export class ShoppingCartListComponent implements OnChanges {
   private totalPrice() : number{
     let totalPrice = 0;
     this.cartList.forEach((item) => {
-      const product = this.products[item.productId];
-      if(product){
-        totalPrice += product.price * item.quantity * product.price_mod;   
-      }
+      totalPrice += this.getSubtoal(item);
     });
     return totalPrice;
+  }
+
+  public getSubtoal(item : ShoppingCartItem){
+    const product = this.products[item.productId];
+    if(product){
+      return product.price * item.quantity * product.price_mod;
+    }
+    return 0;
   }
   
 }
