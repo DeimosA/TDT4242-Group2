@@ -13,13 +13,13 @@ export class ShoppingCartListComponent implements OnChanges {
   private products : Map<number, ProductModel> = new Map<number, ProductModel>();
 
   @Input("items")
-  private cartList : Array<ShoppingCartItem> = [];
+  public cartList : Array<ShoppingCartItem> = [];
 
   @Output("itemChange")
-  private itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
+  public itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
 
   @Output("itemDelete")
-  private itemDelEmitter = new EventEmitter<ShoppingCartItem>();
+  public itemDelEmitter = new EventEmitter<ShoppingCartItem>();
 
   constructor() { }
 
@@ -35,24 +35,24 @@ export class ShoppingCartListComponent implements OnChanges {
       );
   }
 
-  private updateQty(event, item : ShoppingCartItem, diff : number) {
+  public updateQty(event, item : ShoppingCartItem, diff : number) {
     item.quantity += diff;
     this.itemQtyEmitter.emit(item);
     event.preventDefault();
     event.stopPropagation();
   }
 
-  private deleteItem(event, item : ShoppingCartItem) {
+  public deleteItem(event, item : ShoppingCartItem) {
     this.itemDelEmitter.emit(item);
     event.preventDefault();
     event.stopPropagation();
   }
 
-  private productLoaded(item : ShoppingCartItem) {
+  public productLoaded(item : ShoppingCartItem) {
     return item.productId in this.products;
   }
 
-  private product(item : ShoppingCartItem) {
+  public product(item : ShoppingCartItem) {
     return this.products[item.productId];
   }
 

@@ -17,14 +17,17 @@ import { UserModel } from '../_shared/app.models';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
-  private user: UserModel = null;
-  private userAuthEventsSub: Subscription;
-  private userCredentials = {
+
+  public alertMessage: string = '';
+  public userCredentials = {
     email: "",
     password: "",
   };
-  private alertMessage: string = '';
+  
 
+  private user: UserModel = null;
+  private userAuthEventsSub: Subscription;
+  
   constructor(
     private userAuthService: UserAuthService,
     private router: Router,

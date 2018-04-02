@@ -20,10 +20,10 @@ declare let Materialize; // To recognize Materialize global
 })
 export class ProductCreationComponent implements OnInit {
 
-  private loading: boolean = false;
-  private product: ProductModel;
-  private percent_sale: number;
-  private alertMessage: string = '';
+  public loading: boolean = false;
+  public product: ProductModel;
+  public percent_sale: number;
+  public alertMessage: string = '';
 
   constructor(
     private productsService: ProductsService,
