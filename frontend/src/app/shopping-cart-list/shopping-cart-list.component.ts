@@ -90,9 +90,10 @@ export class ShoppingCartListComponent implements OnChanges {
     this.cartList.forEach((item) => {
       const product = this.products[item.productId];
       if(product){
-        totalPrice += product.price * item.quantity;   
+        totalPrice += product.price * item.quantity * product.price_mod;   
       }
     });
     return totalPrice;
   }
+  
 }
