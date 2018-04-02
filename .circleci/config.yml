@@ -47,7 +47,7 @@ jobs:
             - "SHA256:G9r3ZDt/S1SeC4HfgZiJAZ5SPoCx261JbMZSsmlVyJc K@ASUS-K"
       - run:
           name: Build Angular
-          command: ng build --prod
+          command: cd frontend && ng build --prod -op ../backend/assets
       - run:
           name: Deploy Master to Heroku
           command: |
