@@ -13,7 +13,7 @@
   <button type="button" (click)="clearCart()" class="waves-effect waves-light btn">Clear cart</button>
 
   <div>
-    Total price: kr {{ totalPrice() }}
+    Total price: kr {{ totalPrice().toFixed(2) }}
   </div>
   <button *ngIf="user != null" [disabled]="items.length <= 0" type="button" (click)="checkout()" class="waves-effect waves-light btn">Checkout cart</button>
   <button *ngIf="user == null" type="button" (click)="goToLogin()" class="waves-effect waves-light btn">Login to checkout</button>

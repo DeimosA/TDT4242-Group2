@@ -27,7 +27,7 @@
         <span>{{item.quantity}}</span>
         <button (click)="updateQty($event, item, 1)" class="btn-flat waves-effect waves-light cart-btn-small"><i class="material-icons cart-icon-btn">add</i></button>
       </td>
-      <td class="cart-td-right" *ngIf="productLoaded(item)">{{item.quantity * product(item).price.toFixed(2)}}kr</td>
+      <td class="cart-td-right" *ngIf="productLoaded(item)">{{ (item.quantity * product(item).price).toFixed(2)}}kr</td>
       <td class="cart-td-center">
         <button class="btn cart-btn-small red" (click)="deleteItem($event, item)">
           <i class="material-icons">delete</i>
@@ -41,7 +41,7 @@
         <div *ngIf="loadedCount < cartList.length" class="progress">
           <div class="determinate" [style.width.%]="100 * loadedCount/cartList.length"></div>
         </div>
-        <span *ngIf="loadedCount >= cartList.length">{{totalPrice()}}kr</span>
+        <span *ngIf="loadedCount >= cartList.length">{{totalPrice().toFixed(2)}}kr</span>
       </td>
       <td></td>
     </tr>
