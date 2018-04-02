@@ -24,7 +24,6 @@ import { ProductFilterComponent } from './product-filter/product-filter.componen
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { ShoppingCartListComponent } from './shopping-cart-list/shopping-cart-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
-import { CheckoutComponent } from './checkout/checkout.component';
 
 
 /**
@@ -45,7 +44,6 @@ import { CheckoutComponent } from './checkout/checkout.component';
     ShoppingCartComponent,
     ShoppingCartListComponent,
     ProductDetailsComponent,
-    CheckoutComponent
   ],
   imports: [
     BrowserModule,

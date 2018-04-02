@@ -10,7 +10,6 @@ import { DealsComponent } from "./deals/deals.component";
 import { ProductContainerComponent } from "./product-container/product-container.component";
 import { ShoppingCartComponent } from "./shopping-cart/shopping-cart.component";
 import { ProductDetailsComponent } from "./product-details/product-details.component";
-import { CheckoutComponent } from './checkout/checkout.component';
 
 import { AdminModule } from './admin-module/admin.module'; // Shouldn't be necessary?
 
@@ -42,10 +41,6 @@ const appRoutes: Routes = [
   {
     path: 'cart',
     component: ShoppingCartComponent,
-  },
-  {
-    path: 'checkout',
-    component: CheckoutComponent
   },
   {
     path: 'register',
