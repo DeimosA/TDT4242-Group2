@@ -23,9 +23,9 @@
         </div>
       </td>
       <td class="cart-td-center" *ngIf="productLoaded(item)">
-        <button (click)="updateQty($event, item, 1)" class="btn-flat waves-effect waves-light cart-btn-small"><i class="material-icons cart-icon-btn">add</i></button>
-        <span>{{item.quantity}}</span>
         <button (click)="updateQty($event, item, -1)" class="btn-flat waves-effect waves-light cart-btn-small"><i class="material-icons cart-icon-btn">remove</i></button>
+        <span>{{item.quantity}}</span>
+        <button (click)="updateQty($event, item, 1)" class="btn-flat waves-effect waves-light cart-btn-small"><i class="material-icons cart-icon-btn">add</i></button>
       </td>
       <td class="cart-td-right" *ngIf="productLoaded(item)">{{item.quantity * product(item).price.toFixed(2)}}kr</td>
       <td class="cart-td-center">
