@@ -50,7 +50,7 @@ jobs:
           command: |
             rm -r frontend
             mv backend/{.[!.],}* ./
-            git push --force git@heroku.com:tdt4242-group2.git HEAD:refs/heads/master
+            git push --force git@heroku.com:tdt4242-group2.git
             heroku restart -a tdt4242-group2
 
 workflows:
