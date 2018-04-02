@@ -46,11 +46,18 @@ jobs:
           fingerprints:
             - "SHA256:G9r3ZDt/S1SeC4HfgZiJAZ5SPoCx261JbMZSsmlVyJc K@ASUS-K"
       - run:
+          name: Build Angular
+          command: ng build --prod
+      - run:
           name: Deploy Master to Heroku
           command: |
             rm -r frontend
             mv backend/{.[!.],}* ./
-            git push --force git@heroku.com:tdt4242-group2.git
+            git add -A
+            git config --global user.email "git@heroku.com"
+            git config --global user.name "git@heroku.com"
+            git commit -m "deploy heroku"
+            git push --force git@heroku.com:tdt4242-group2.git HEAD:refs/heads/master
             heroku restart -a tdt4242-group2
 
 workflows:
