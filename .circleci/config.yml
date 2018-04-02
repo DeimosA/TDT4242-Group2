@@ -44,12 +44,12 @@ jobs:
           command: bash .circleci/setup-heroku.sh
       - add_ssh_keys:
           fingerprints:
-            - "a6:aa:7f:bc:c1:d0:8a:45:1f:d3:2d:bf:f3:23:0e:2b"
+            - "SHA256:G9r3ZDt/S1SeC4HfgZiJAZ5SPoCx261JbMZSsmlVyJc K@ASUS-K"
       - run:
           name: Deploy Master to Heroku
           command: |
-            git push --force git@heroku.com:mighty-garden-63617.git HEAD:refs/heads/master
-            heroku restart -a mighty-garden-63617
+            git push --force git@heroku.com:tdt4242-group2.git HEAD:refs/heads/master
+            heroku restart -a tdt4242-group2
 
 workflows:
   version: 2
