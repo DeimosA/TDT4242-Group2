@@ -38,12 +38,10 @@ import { ShoppingCartService } from "../_shared/services/shopping-cart.service";
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-  private title: string = 'SPESIALBUA';
-  private user: UserModel = null;
-  private userAuthEventsSub: Subscription;
-  private messageToggle: string = 'A';
-  private messageIndex: number = 0;
-  private welcomeMessageList: string[] = [
+  public title: string = 'SPESIALBUA';
+  public user: UserModel = null;
+  public messageToggle: string = 'A';
+  public welcomeMessageList: string[] = [
     "Welcome to our wonderful e-commerce site",
     "Shop til you drop ... seriously",
     "DevOps 4 life!",
@@ -54,12 +52,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     "FREE universal delivery (within the solar system)",
     "Bitcoin? We don't take coins, just bits",
   ];
+  
+  public itemsInCart = 0;
+  
+  private messageIndex: number = 0;
   private welcomeMessageA: string = this.welcomeMessageList[this.messageIndex];
   private welcomeMessageB: string = '';
 
-  private itemsInCart = 0;
+  
+  private userAuthEventsSub: Subscription;
   private intervalId : number;
   private shoppingCartSub : Subscription;
+
 
   constructor(
     private userAuthService: UserAuthService,

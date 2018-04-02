@@ -14,16 +14,17 @@ import { ProductModel, SearchForm} from "../_shared/app.models";
 })
 export class ProductContainerComponent implements OnInit {
 
-  // list of product items loaded in on th frontend
-  private products: ProductModel[] = [];
+  // list of product items loaded in on the frontend
+  public products: ProductModel[] = [];
+  
+  // loading bool so the scrolling can behave
+  public loading: boolean;
 
   // what "page" of the products you are browsing
   private product_list_page = 0;
   private product_list_limit = 10;
 
-  // loading bool so the scrolling can behave
-  private loading: boolean;
-
+  
   // vars to handle getProducts
   private searchFormFields: SearchForm = {
     search: '',

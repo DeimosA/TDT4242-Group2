@@ -15,11 +15,11 @@ import { UserAuthService } from '../_shared/services/user-auth.service';
 })
 export class RegisterComponent implements OnInit {
 
-  private userCredentials = {
+  public userCredentials = {
     email: "",
     password: "",
   };
-  private alertMessage: string = '';
+  public alertMessage: string = '';
 
   constructor(
     private userAuthService: UserAuthService,
