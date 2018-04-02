@@ -15,5 +15,6 @@
   <div>
     Total price: kr {{ totalPrice() }}
   </div>
-  <button [disabled]="items.length <= 0" type="button" (click)="checkout()" class="waves-effect waves-light btn">Checkout cart</button>
+  <button *ngIf="user != null" [disabled]="items.length <= 0" type="button" (click)="checkout()" class="waves-effect waves-light btn">Checkout cart</button>
+  <button *ngIf="user == null" type="button" (click)="goToLogin()" class="waves-effect waves-light btn">Login to checkout</button>
 </div>
