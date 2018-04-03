@@ -4,15 +4,9 @@
   margin: 0;
 }
 
-.shopping-cart-item a {
-  /*display: block;*/
-  /*padding: 15px;*/
-}
-
 .shopping-cart-item a:hover {
   text-decoration: underline;
 }
-
 
 .shopping-cart-item:hover {
   background-color: #e8eaf6;

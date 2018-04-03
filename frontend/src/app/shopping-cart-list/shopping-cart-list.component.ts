@@ -2,6 +2,10 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 
 import { ShoppingCartItem, ProductModel } from '../_shared/app.models';
 
+
+/**
+ * The list showing all the unique items in the cart and their quantity
+ */
 @Component({
   selector: 'app-shopping-cart-list',
   templateUrl: './shopping-cart-list.component.html',
@@ -30,6 +34,9 @@ export class ShoppingCartListComponent implements OnChanges {
     this.fillProducts()
   }
 
+  /**
+   * Fill the cart with product details
+   */
   private fillProducts() {
     this.loadedCount = 0;
     this.cartList
@@ -55,6 +62,9 @@ export class ShoppingCartListComponent implements OnChanges {
       });
   }
 
+  /**
+   * Update the quantity of a cart item
+   */
   private updateQty(event, item : ShoppingCartItem, diff : number) {
     item.quantity += diff;
     this.itemQtyEmitter.emit(item);
@@ -63,20 +73,32 @@ export class ShoppingCartListComponent implements OnChanges {
     event.stopPropagation();
   }
 
+  /**
+   * Delete an item from the list
+   */
   private deleteItem(event, item : ShoppingCartItem) {
     this.itemDelEmitter.emit(item);
     event.preventDefault();
     event.stopPropagation();
   }
 
+  /**
+   * Check if a product item is loaded from the server
+   */
   private productLoaded(item : ShoppingCartItem) {
     return item.productId in this.products;
   }
 
+  /**
+   * Get product details for a cart item
+   */
   private product(item : ShoppingCartItem) {
     return this.products[item.productId];
   }
 
+  /**
+   * Total number of unique items in cart
+   */
   private totalCount() : number{
     let count = 0;
     this.cartList.forEach((item) => {
@@ -85,6 +107,9 @@ export class ShoppingCartListComponent implements OnChanges {
     return count;
   }
 
+  /**
+   * Calculate total price for the cart
+   */
   private totalPrice() : number{
     let totalPrice = 0;
     this.cartList.forEach((item) => {
@@ -93,6 +118,9 @@ export class ShoppingCartListComponent implements OnChanges {
     return totalPrice;
   }
 
+  /**
+   * Get sum for a single item
+   */
   public getSubtoal(item : ShoppingCartItem){
     const product = this.products[item.productId];
     if(product){
