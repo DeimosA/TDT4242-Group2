@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-
-import { ShoppingCartItem, ProductModel } from '../app.models';
-import { ShoppingCartComponent } from '../../shopping-cart/shopping-cart.component';
-import { Subject } from 'rxjs/Subject';
-
-import { ProductsService } from './products.service';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { ShoppingCartItem } from '../app.models';
+import { ProductsService } from './products.service';
+
+
+/**
+ * Service for everything shopping cart related
+ */
 @Injectable()
 export class ShoppingCartService {
   private cart : Array<ShoppingCartItem>;
@@ -34,11 +35,16 @@ export class ShoppingCartService {
     this.updateAndNotify();
   }
 
+  /**
+   * Find an item in the cart
+   */
   private findItem(id: number) : ShoppingCartItem{
     return this.cart.find((e) => e.productId == id);
   }
 
-
+  /**
+   * Add an item to the cart
+   */
   public addItem(productId : number, qty : number = 1){
     let item = this.findItem(productId);
     if(!item){
@@ -52,16 +58,25 @@ export class ShoppingCartService {
     this.updateAndNotify();
   }
 
+  /**
+   * Remove an item from the cart
+   */
   public removeItem(productId : number){
     this.cart = this.cart.filter((e) => e.productId != productId);
     this.updateAndNotify();
   }
 
+  /**
+   * Clear all items in the cart
+   */
   public clearCart() {
     this.cart = [];
     this.updateAndNotify();
   }
 
+  /**
+   * Update item quantity
+   */
   public updateItem(newItem : ShoppingCartItem){
     let item = this.findItem(newItem.productId);
     if(item){
@@ -70,10 +85,16 @@ export class ShoppingCartService {
     this.updateAndNotify();
   }
 
+  /**
+   * Get an observable that fires on cart changes
+   */
   public getShoppingCart() : Observable<Array<ShoppingCartItem>>{
     return this.cartSub.asObservable();
   }
 
+  /**
+   * Trigger a cart subscription notification
+   */
   private updateAndNotify(){
     this.cartSub.next(this.cart.slice());
     localStorage.setItem("shopping-cart", JSON.stringify(this.cart.map((e) => {

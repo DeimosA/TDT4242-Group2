@@ -95,6 +95,7 @@ interface OrderModel {
   status: string;
   user_confirmed: boolean;
   order_details: object[];
+  createdAt: string;
 }
 
 export { UserModel, ProductModel, ShoppingCartItem, SearchForm, OrderModel }

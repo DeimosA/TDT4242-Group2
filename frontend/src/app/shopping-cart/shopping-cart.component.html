@@ -4,14 +4,17 @@
 <app-shopping-cart-list
   [items]="items"
   (itemDelete)="deleteItem($event)"
-  (itemChange)="changeItem($event)">
+  (itemChange)="changeItem($event)"
+  (totalPriceChange)="changePrice($event)"
+  >
 </app-shopping-cart-list>
 
 <div class="flow-text cart-actions">
   <button type="button" (click)="clearCart()" class="waves-effect waves-light btn">Clear cart</button>
 
   <div>
-    Total price: kr {{ totalPrice() }}
+    Total price: kr {{ totalPrice().toFixed(2) }}
   </div>
-  <button type="button" (click)="checkout()" class="waves-effect waves-light btn">Checkout cart</button>
+  <button *ngIf="user != null" [disabled]="items.length <= 0" type="button" (click)="checkout()" class="waves-effect waves-light btn">Checkout cart</button>
+  <button *ngIf="user == null" type="button" (click)="goToLogin()" class="waves-effect waves-light btn">Login to checkout</button>
 </div>

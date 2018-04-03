@@ -1,10 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { Subscription } from 'rxjs/Subscription';
 
 import { ShoppingCartService } from '../_shared/services/shopping-cart.service';
-import { ShoppingCartItem } from '../_shared/app.models';
+import { OrderService } from '../_shared/services/order.service';
+
+import { ShoppingCartItem, OrderModel, UserModel } from '../_shared/app.models';
+import { UserAuthService } from '../_shared/services/user-auth.service';
 
 
+/**
+ * Component for showing the shopping cart list, total price and checkout button
+ */
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
@@ -12,38 +20,83 @@ import { ShoppingCartItem } from '../_shared/app.models';
 })
 export class ShoppingCartComponent implements OnInit {
 
-  public items : Array<ShoppingCartItem> = [];
+  private items : Array<ShoppingCartItem> = [];
   private shoppingCartSub : Subscription;
-  constructor(private shoppingCart : ShoppingCartService) { }
+  private _totalPrice : number = 0;
+
+  public user : UserModel;
+
+  constructor(
+    private shoppingCart : ShoppingCartService,
+    private orderService : OrderService,
+    private router : Router,
+    private userService : UserAuthService
+  ) { }
 
   ngOnInit() {
     this.shoppingCartSub = this.shoppingCart.getShoppingCart().subscribe((items : Array<ShoppingCartItem>) => {
       this.items = items;
-    })
+    });
+    this.userService.getUserAuthEvents().subscribe((user : UserModel) => {
+      this.user = user;
+    });
   }
 
   ngOnDestroy(){
     this.shoppingCartSub.unsubscribe();
   }
 
-  public deleteItem(item : ShoppingCartItem){
+  /**
+   * Delete an item from the cart
+   */
+  private deleteItem(item : ShoppingCartItem){
     this.shoppingCart.removeItem(item.productId);
   }
 
-  public changeItem(item : ShoppingCartItem){
+  /**
+   * Update cart item callback
+   */
+  private changeItem(item : ShoppingCartItem){
     this.shoppingCart.updateItem(item);
   }
 
-  public totalPrice(): number {
-    return 0; // todo
+  /**
+   * Update total cart price callback
+   */
+  private changePrice(price: number){
+    this._totalPrice = price;
   }
 
-  public checkout() {
-    return; // todo
+  /**
+   * Get total cart price
+   */
+  private totalPrice(): number {
+    return this._totalPrice;
   }
 
-  public clearCart() {
+  /**
+   * Checkout and place order
+   */
+  private checkout() {
+    this.orderService.createOrder(this.items).subscribe( (order : OrderModel) => {
+      this.shoppingCart.clearCart();
+      this.router.navigate(['/mypage']);
+    });
+  }
+
+  /**
+   * Clear all items in the cart
+   */
+  private clearCart() {
     this.shoppingCart.clearCart();
+    this._totalPrice = 0;
+  }
+
+  /**
+   * Navigate to login page
+   */
+  public goToLogin(){
+    this.router.navigate(['/login']);
   }
 
 }

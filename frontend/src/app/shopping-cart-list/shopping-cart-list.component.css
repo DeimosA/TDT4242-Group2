@@ -4,11 +4,24 @@
   margin: 0;
 }
 
-.shopping-cart-item a {
-  display: block;
-  padding: 15px;
+.shopping-cart-item a:hover {
+  text-decoration: underline;
 }
 
 .shopping-cart-item:hover {
   background-color: #e8eaf6;
+}
+.cart-icon-btn{
+  font-size: 15px;
+}
+.cart-td-center{
+  text-align: center;
+}
+.cart-td-right{
+  text-align: right;
+}
+
+.cart-btn-small, .cart-btn-small *{
+  padding-left: 0.15em;
+  padding-right: 0.15em;
 }
