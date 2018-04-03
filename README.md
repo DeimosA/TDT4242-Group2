@@ -1,6 +1,8 @@
 # TDT4242 Group2
 Shop til you drop devops and webapp project for TDT4242 2018.
 
+[Link to app on Heroku](https://tdt4242-group2.herokuapp.com/)
+
 ### TOC
 * [Code review info](#code-review-info)
 * [Development setup](#development-setup)
@@ -9,16 +11,11 @@ Shop til you drop devops and webapp project for TDT4242 2018.
 ## Code review info
 Here follows some useful info for those who should review our code.
 
-The code from sprint 1 will remain in the [*master* branch](https://github.com/DeimosA/TDT4242-Group2/tree/master).
-Note that *dev* is the default branch in our repo so click previous link as needed.
-
-We have added a demo DB with an admin user and a few products that you can use if you'd like to. Just copy the `localDiskDb.db` file from `backend/_demo_db` to `backend/.tmp` after the first time you run Sails (or just create the `.tmp` dir yourself).
+We have added a demo DB with an admin user and a few products that you can use if you'd like to. Just copy the `localDiskDb.db` file from `backend/_demo_db` to `backend/.tmp` after the first time you run Sails (or just create the `.tmp` dir yourself). Then log in with:
 ```
 E-mail:     admin@admin.com
 password:   funwithcodereview
 ```
-
-<!--(link to site)-->
 
 ### Backend
 Our server is based on the [Sails](https://sailsjs.com/) framework which exposes a somewhat RESTful API. The backend folder includes a lot of generated files, so we have listed the most relevant folders and files that we have edited. Sails blueprints mostly handle the regular CRUD operations, so *don't panic* if you can't find any code for them. Permissions for these operations are defined in `policies.js`.

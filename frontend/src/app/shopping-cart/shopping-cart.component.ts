@@ -12,7 +12,7 @@ import { ShoppingCartItem } from '../_shared/app.models';
 })
 export class ShoppingCartComponent implements OnInit {
 
-  items : Array<ShoppingCartItem> = [];
+  public items : Array<ShoppingCartItem> = [];
   private shoppingCartSub : Subscription;
   constructor(private shoppingCart : ShoppingCartService) { }
 
@@ -26,23 +26,23 @@ export class ShoppingCartComponent implements OnInit {
     this.shoppingCartSub.unsubscribe();
   }
 
-  private deleteItem(item : ShoppingCartItem){
+  public deleteItem(item : ShoppingCartItem){
     this.shoppingCart.removeItem(item.productId);
   }
 
-  private changeItem(item : ShoppingCartItem){
+  public changeItem(item : ShoppingCartItem){
     this.shoppingCart.updateItem(item);
   }
 
-  private totalPrice(): number {
+  public totalPrice(): number {
     return 0; // todo
   }
 
-  private checkout() {
+  public checkout() {
     return; // todo
   }
 
-  private clearCart() {
+  public clearCart() {
     this.shoppingCart.clearCart();
   }
 

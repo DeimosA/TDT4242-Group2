@@ -5,49 +5,61 @@
 version: 2
 
 jobs:
-  build:
-    docker:
-      - image: circleci/node:9.6.1
-    working_directory: ~/repo/backend
-
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "backend/package.json" }}
-      - run: cd backend && yarn install
-      - save_cache:
-          paths:
-            - backend/node_modules
-          key: v1-dependencies-{{ checksum "backend/package.json" }}
+#  build:
+#    docker:
+#      - image: circleci/node:9.6.1
+#    working_directory: ~/repo
+#
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          key: v1-dependencies-{{ checksum "backend/package.json" }}
+#      - run: cd backend && yarn install
+#      - save_cache:
+#          paths:
+#            - backend/node_modules
+#          key: v1-dependencies-{{ checksum "backend/package.json" }}
 
   test:
     docker:
       - image: circleci/node:9.6.1
-    working_directory: ~/repo/backend
+    working_directory: ~/repo
     
     steps:
       - checkout
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "backend/package.json" }}
+#      - restore_cache:
+#          key: v1-dependencies-{{ checksum "backend/package.json" }}
       - run: cd backend && yarn install
       - run: cd backend && yarn test
 
   deploy:
     docker:
       - image: circleci/node:9.6.1
-    working_directory: ~/repo/backend
+    working_directory: ~/repo
 
     steps:
       - checkout
-      - run:
-          name: Run setup script
-          command: bash .circleci/setup-heroku.sh
       - add_ssh_keys:
           fingerprints:
             - "SHA256:G9r3ZDt/S1SeC4HfgZiJAZ5SPoCx261JbMZSsmlVyJc K@ASUS-K"
       - run:
+          name: Run setup script
+          command: bash .circleci/setup-heroku.sh
+      - run:
+          name: Build Angular
+          command: |
+            cd frontend
+            yarn install
+            node_modules/.bin/ng build --prod -op ../backend/assets
+      - run:
           name: Deploy Master to Heroku
           command: |
+            rm -r frontend
+            mv backend/{.[!.],}* ./
+            git add -A
+            git config --global user.email "git@heroku.com"
+            git config --global user.name "git@heroku.com"
+            git commit -m "deploy heroku"
             git push --force git@heroku.com:tdt4242-group2.git HEAD:refs/heads/master
             heroku restart -a tdt4242-group2
 
@@ -55,15 +67,15 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+#      - build
+      - test
+#          requires:
+#            - build
       - deploy:
           requires:
-            - build
+#            - build
             - test
           filters:
             branches:
               only:
-                - master
+                - heroku-deploy
