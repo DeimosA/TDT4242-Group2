@@ -15,7 +15,6 @@ import { ProductsService } from "../_shared/services/products.service";
 export class DealsComponent implements OnInit {
 
   saleProducts: ProductModel[];
-  // TODO pagination
 
   constructor(
     private productsService: ProductsService,
