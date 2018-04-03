@@ -51,6 +51,9 @@ export class MypageComponent implements OnInit, OnDestroy {
   private getOrderHistory() {
     this.userAuthService.getOrderHistory(this.currentUser.id).subscribe(
       result => {
+        result.sort((a, b) => {
+          return b.createdAt.localeCompare(a.createdAt);
+        });
         this.orderHistory = result;
       }, error => {
         this.orderHistory = null;
