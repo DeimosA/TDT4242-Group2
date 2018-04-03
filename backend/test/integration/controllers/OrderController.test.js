@@ -3,7 +3,6 @@ const should = require('should');
 
 describe('OrderController', () => {
 
-  /* Wrap for request */
   const post = (url, data, code, cookie = '') =>
     request(sails.hooks.http.app).post(url).set('Cookie', cookie).send(data).expect(code);
   const get = (url, code, cookie = '') =>
@@ -25,7 +24,7 @@ describe('OrderController', () => {
 
   const user = {
     email: 'test@test.com',
-    password: 'test123test'
+    password: 'test123test',
   };
 
   const code = {
@@ -34,7 +33,7 @@ describe('OrderController', () => {
     badRequest: 400,
     unauthorized: 401,
     forbidden: 403,
-    notFound: 404
+    notFound: 404,
   };
 
   describe('New Order', () => {
@@ -60,7 +59,10 @@ describe('OrderController', () => {
     });
 
     it('should order!', async () => {
-      const order = [{ productId: products[0].id, quantity: 2 }, { productId: products[1].id, quantity: 7 }];
+      const order = [
+        { productId: products[0].id, quantity: 2 },
+        { productId: products[1].id, quantity: 7 },
+      ];
       await post(api.new, order, code.created, cookie).then((res) => {
         should.exist(res.body);
         orderId = res.body.id;
@@ -87,7 +89,10 @@ describe('OrderController', () => {
     });
 
     it('should order! again!', async () => {
-      const order = [{ productId: products[0].id, quantity: 2 }, { productId: products[1].id, quantity: 7 }];
+      const order = [
+        { productId: products[0].id, quantity: 2 },
+        { productId: products[1].id, quantity: 7 },
+      ];
       await post(api.new, order, code.created, cookie).then((res) => {
         should.exist(res.body);
         orderId = res.body.id;
@@ -98,41 +103,39 @@ describe('OrderController', () => {
       });
     });
 
-    ['ACCEPTED', 'AWAITING_RESUPPLY', 'SHIPPED', 'CANCELLED'].forEach(orderStatus => {
-      it('should change order status to ' + orderStatus, (next) => {
-        post(api.setStatus(orderId), {status: orderStatus}, code.ok, cookie).then(res => {
-          should(res.body.status).equal(orderStatus);
+    ['ACCEPTED', 'AWAITING_RESUPPLY', 'SHIPPED', 'CANCELLED'].forEach((orderStatus) => {
+      it(`should change order status to ${orderStatus}`, (next) => {
+        post(api.setStatus(orderId), { status: orderStatus }, code.ok, cookie).then(({ body }) => {
+          should(body.status).equal(orderStatus);
           next();
         }).catch(next);
       });
     });
 
-    ['sUperSTATus', 'Your package was sent yesterday', 'No, just no!'].forEach(orderStatus => {
-      it('should NOT accept arbitrary status: ' + orderStatus, (next) => {
-        post(api.setStatus(orderId), {status: orderStatus}, code.badRequest, cookie).then(res => {
-          should.exist(res.body.error);
+    ['sUperSTATus', 'Your package was sent yesterday', 'No, just no!'].forEach((orderStatus) => {
+      it(`should NOT accept arbitrary status: ${orderStatus}`, (next) => {
+        post(api.setStatus(orderId), { status: orderStatus }, code.badRequest, cookie).then(({ body }) => {
+          should.exist(body.error);
           next();
         }).catch(next);
       });
     });
 
     it('should NOT change order status back to PENDING!', async () => {
-      await post(api.setStatus(orderId), {status: 'PENDING'}, code.badRequest, cookie).then(res => {
-        should.exist(res.body.error);
+      await post(api.setStatus(orderId), { status: 'PENDING' }, code.badRequest, cookie).then(({ body }) => {
+        should.exist(body.error);
       });
     });
 
     it('should NOT change order status if not admin!', async () => {
-      // Login as non admin user
       let newCookie;
-      await post(api.login, {email: 'anothertest@test.com', password: 'test123test'}, code.ok).then((res) => {
-        should.exist(res.header['set-cookie']); // cookie
-        newCookie = res.headers['set-cookie'];
+      await post(api.login, { email: 'anothertest@test.com', password: 'test123test' }, code.ok).then(({ headers }) => {
+        should.exist(headers['set-cookie']);
+        newCookie = headers['set-cookie'];
       });
-      await post(api.setStatus(orderId), {status: 'ACCEPTED'}, code.forbidden, newCookie).then(res => {
-        should.exist(res.body.error);
+      await post(api.setStatus(orderId), { status: 'ACCEPTED' }, code.forbidden, newCookie).then(({ body }) => {
+        should.exist(body.error);
       });
     });
-
   });
 });
