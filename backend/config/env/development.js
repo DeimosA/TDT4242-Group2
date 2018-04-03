@@ -21,4 +21,8 @@ module.exports = {
   //   connection: 'someMongodbServer'
   // }
 
+  session: {
+    secret: 'ae63cfcfe4de69b65caa425ad27ae3a7',
+  },
+
 };
