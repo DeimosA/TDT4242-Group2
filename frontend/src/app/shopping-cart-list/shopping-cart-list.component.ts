@@ -21,7 +21,7 @@ export class ShoppingCartListComponent implements OnChanges {
   private itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
 
   @Output("itemDelete")
-  private itemDelEmitter = new EventEmitter<ShoppingCartItem>(); 
+  private itemDelEmitter = new EventEmitter<ShoppingCartItem>();
   private loadedCount = 0;
 
   constructor() { }
@@ -80,7 +80,7 @@ export class ShoppingCartListComponent implements OnChanges {
   private totalCount() : number{
     let count = 0;
     this.cartList.forEach((item) => {
-      count += item.quantity 
+      count += item.quantity
     });
     return count;
   }
@@ -96,9 +96,29 @@ export class ShoppingCartListComponent implements OnChanges {
   public getSubtoal(item : ShoppingCartItem){
     const product = this.products[item.productId];
     if(product){
-      return product.price * item.quantity * product.price_mod;
+      return this.calculatePrice[product.on_sale](item.quantity, product);
     }
     return 0;
   }
-  
+
+  /**
+   * Calculate price based on sale type
+   */
+  private calculatePrice = {
+    NO_SALE: (quantity, product) => {
+      return quantity * product.price;
+    },
+
+    PRICE_MOD: (quantity, product) => {
+      return quantity * parseFloat((product.price * product.price_mod).toFixed(2));
+    },
+
+    PACKAGE: (quantity, product) => {
+      const { package_get_count, package_pay_count, price } = product;
+      const discounted = Math.floor(quantity / package_get_count) * package_pay_count * price;
+      const remainder = (quantity % package_get_count) * price;
+      return discounted + remainder;
+    },
+  };
+
 }

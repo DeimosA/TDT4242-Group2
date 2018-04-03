@@ -15,6 +15,11 @@ export class OrderService {
     private http: HttpClient,
   ) { }
 
+  /**
+   * Create a new order based on the shopping cart items
+   * @param {Array<ShoppingCartItem>} items
+   * @returns {Observable<OrderModel>}
+   */
   createOrder(items: Array<ShoppingCartItem>): Observable<OrderModel> {
     const url = `/api/order`;
     return this.http.post<OrderModel>(url, items.map((item : ShoppingCartItem) => {

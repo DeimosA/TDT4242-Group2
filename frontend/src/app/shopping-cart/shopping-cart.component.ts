@@ -24,8 +24,8 @@ export class ShoppingCartComponent implements OnInit {
   public user : UserModel;
 
   constructor(
-    private shoppingCart : ShoppingCartService, 
-    private orderService : OrderService, 
+    private shoppingCart : ShoppingCartService,
+    private orderService : OrderService,
     private router : Router,
     private userService : UserAuthService
   ) { }
@@ -68,6 +68,7 @@ export class ShoppingCartComponent implements OnInit {
 
   private clearCart() {
     this.shoppingCart.clearCart();
+    this._totalPrice = 0;
   }
 
   public goToLogin(){
