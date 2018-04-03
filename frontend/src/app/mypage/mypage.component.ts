@@ -16,11 +16,13 @@ import { OrderModel, UserModel } from '../_shared/app.models';
 })
 export class MypageComponent implements OnInit, OnDestroy {
 
-  private currentUser: UserModel;
-  private userAuthEventsSub: Subscription;
-  private orderHistory: object[];
-  private alertMessage: string = '';
+  public currentUser: UserModel;
+  public orderHistory: object[];
+  public alertMessage: string = '';
 
+  
+  private userAuthEventsSub: Subscription;
+  
   constructor(
     private userAuthService: UserAuthService,
     private orderService: OrderService,

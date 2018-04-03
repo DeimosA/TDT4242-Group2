@@ -17,9 +17,9 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  // models: {
-  //   connection: 'someMysqlServer'
-  // },
+  models: {
+    connection: 'herokuPostgresqlServer',
+  },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
@@ -34,5 +34,9 @@ module.exports = {
   // log: {
   //   level: "silent"
   // }
+
+  session: {
+    secret: process.env.SESSION_SECRET,
+  },
 
 };

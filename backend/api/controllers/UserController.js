@@ -70,6 +70,9 @@ module.exports = {
    * Remove a users admin privileges
    */
   removeAdmin: function (req, res) {
+    if (req.params.id == req.session.userId) {
+      return res.forbidden({error: 'Can not remove admin from yourself'});
+    }
     User.update(req.params.id, {isAdmin: false}).exec(function (err, user) {
       if (err) { return res.negotiate(err); }
       if (!user || user.length < 1) { return res.notFound({error: 'User not found'}); }

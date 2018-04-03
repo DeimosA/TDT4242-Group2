@@ -58,8 +58,9 @@ module.exports.routes = {
 
   // Catch all but static assets for angular frontend
   'GET r|^\/(?!api).+|': {
-    view: 'index',
-    skipAssets: true
+    controller: 'IndexController',
+    action: 'index',
+    skipAssets: true,
   },
 
 };

@@ -16,13 +16,13 @@ export class ShoppingCartListComponent implements OnChanges {
   private products : Map<number, ProductModel> = new Map<number, ProductModel>();
 
   @Input("items")
-  private cartList : Array<ShoppingCartItem> = [];
+  public cartList : Array<ShoppingCartItem> = [];
 
   @Output("totalPriceChange")
   private totalPriceEmitter = new EventEmitter<number>();
 
   @Output("itemChange")
-  private itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
+  public itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
 
   @Output("itemDelete")
   private itemDelEmitter = new EventEmitter<ShoppingCartItem>();

@@ -15,14 +15,15 @@ import { OrderModel } from '../_shared/app.models';
 export class OrderHistoryListComponent implements OnInit {
 
   @Input()
-  orderHistory: OrderModel[];
+  public orderHistory: OrderModel[];
 
   @Output()
-  dismissOrderCallback = new EventEmitter<OrderModel>();
+  public dismissOrderCallback = new EventEmitter<OrderModel>();
+
+  public modalActions = new EventEmitter<MaterializeAction>();
 
   private modalContext: OrderModel;
-  private modalActions = new EventEmitter<MaterializeAction>();
-
+  
   constructor() { }
 
   ngOnInit() {
@@ -31,14 +32,14 @@ export class OrderHistoryListComponent implements OnInit {
   /**
    * Convert ISO format date string to users locale string
    */
-  private toReadableDate(isoDateString : string): string {
+  public toReadableDate(isoDateString : string): string {
     return new Date(isoDateString).toLocaleDateString();
   }
 
   /**
    * Open the modal to confirm cancelling an order
    */
-  private openDismissOrderModal(order: OrderModel) {
+  public openDismissOrderModal(order: OrderModel) {
     this.modalContext = order;
     this.modalActions.emit({action: 'modal', params:['open']});
   }
@@ -46,7 +47,7 @@ export class OrderHistoryListComponent implements OnInit {
   /**
    * Don't cancel the order anyway
    */
-  private cancelDismissOrder() {
+  public cancelDismissOrder() {
     this.modalContext = null;
     this.modalActions.emit({action: 'modal', params: ['close']});
   }
@@ -54,7 +55,7 @@ export class OrderHistoryListComponent implements OnInit {
   /**
    * Dismiss an order
    */
-  private dismissOrder() {
+  public dismissOrder() {
     this.modalActions.emit({action: 'modal', params: ['close']});
     this.dismissOrderCallback.emit(this.modalContext);
     this.modalContext = null;
