@@ -1,3 +1,32 @@
-<p>
-  user-list works!
-</p>
+
+<div class="section">
+  <h2>All users</h2>
+</div>
+
+<app-dismissible-alert [(alertMessage)]="alertMessage"></app-dismissible-alert>
+
+<ul class="collection">
+  <li *ngFor="let user of userList" class="collection-item">
+    <div>
+      User ID: {{ user.id }}
+    </div>
+    <div>
+      Email: {{ user.email }}
+    </div>
+    <div>
+      Is admin: {{ user.isAdmin }}
+    </div>
+    <button *ngIf="user.isAdmin"
+            type="button"
+            (click)="toggleAdmin(user)"
+            class="btn waves-effect waves-light">
+      Remove admin
+    </button>
+    <button *ngIf="!user.isAdmin"
+            type="button"
+            (click)="toggleAdmin(user)"
+            class="btn waves-effect waves-light">
+      Make admin
+    </button>
+  </li>
+</ul>
