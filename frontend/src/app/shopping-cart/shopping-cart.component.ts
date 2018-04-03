@@ -20,10 +20,10 @@ import { UserAuthService } from '../_shared/services/user-auth.service';
 })
 export class ShoppingCartComponent implements OnInit {
 
-  private items : Array<ShoppingCartItem> = [];
   private shoppingCartSub : Subscription;
   private _totalPrice : number = 0;
 
+  public items : Array<ShoppingCartItem> = [];
   public user : UserModel;
 
   constructor(
@@ -49,35 +49,35 @@ export class ShoppingCartComponent implements OnInit {
   /**
    * Delete an item from the cart
    */
-  private deleteItem(item : ShoppingCartItem){
+  public deleteItem(item : ShoppingCartItem){
     this.shoppingCart.removeItem(item.productId);
   }
 
   /**
    * Update cart item callback
    */
-  private changeItem(item : ShoppingCartItem){
+  public changeItem(item : ShoppingCartItem){
     this.shoppingCart.updateItem(item);
   }
 
   /**
    * Update total cart price callback
    */
-  private changePrice(price: number){
+  public changePrice(price: number){
     this._totalPrice = price;
   }
 
   /**
    * Get total cart price
    */
-  private totalPrice(): number {
+  public totalPrice(): number {
     return this._totalPrice;
   }
 
   /**
    * Checkout and place order
    */
-  private checkout() {
+  public checkout() {
     this.orderService.createOrder(this.items).subscribe( (order : OrderModel) => {
       this.shoppingCart.clearCart();
       this.router.navigate(['/mypage']);
@@ -87,7 +87,7 @@ export class ShoppingCartComponent implements OnInit {
   /**
    * Clear all items in the cart
    */
-  private clearCart() {
+  public clearCart() {
     this.shoppingCart.clearCart();
     this._totalPrice = 0;
   }

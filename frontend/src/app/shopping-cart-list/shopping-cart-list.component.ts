@@ -19,14 +19,14 @@ export class ShoppingCartListComponent implements OnChanges {
   public cartList : Array<ShoppingCartItem> = [];
 
   @Output("totalPriceChange")
-  private totalPriceEmitter = new EventEmitter<number>();
+  public totalPriceEmitter = new EventEmitter<number>();
 
   @Output("itemChange")
   public itemQtyEmitter = new EventEmitter<ShoppingCartItem>();
 
   @Output("itemDelete")
-  private itemDelEmitter = new EventEmitter<ShoppingCartItem>();
-  private loadedCount = 0;
+  public itemDelEmitter = new EventEmitter<ShoppingCartItem>();
+  public loadedCount = 0;
 
   constructor() { }
 
@@ -65,7 +65,7 @@ export class ShoppingCartListComponent implements OnChanges {
   /**
    * Update the quantity of a cart item
    */
-  private updateQty(event, item : ShoppingCartItem, diff : number) {
+  public updateQty(event, item : ShoppingCartItem, diff : number) {
     item.quantity += diff;
     this.itemQtyEmitter.emit(item);
     this.totalPriceEmitter.emit(this.totalPrice());
@@ -76,7 +76,7 @@ export class ShoppingCartListComponent implements OnChanges {
   /**
    * Delete an item from the list
    */
-  private deleteItem(event, item : ShoppingCartItem) {
+  public deleteItem(event, item : ShoppingCartItem) {
     this.itemDelEmitter.emit(item);
     event.preventDefault();
     event.stopPropagation();
@@ -85,21 +85,21 @@ export class ShoppingCartListComponent implements OnChanges {
   /**
    * Check if a product item is loaded from the server
    */
-  private productLoaded(item : ShoppingCartItem) {
+  public productLoaded(item : ShoppingCartItem) {
     return item.productId in this.products;
   }
 
   /**
    * Get product details for a cart item
    */
-  private product(item : ShoppingCartItem) {
+  public product(item : ShoppingCartItem) {
     return this.products[item.productId];
   }
 
   /**
    * Total number of unique items in cart
    */
-  private totalCount() : number{
+  public totalCount() : number{
     let count = 0;
     this.cartList.forEach((item) => {
       count += item.quantity
@@ -110,7 +110,7 @@ export class ShoppingCartListComponent implements OnChanges {
   /**
    * Calculate total price for the cart
    */
-  private totalPrice() : number{
+  public totalPrice() : number{
     let totalPrice = 0;
     this.cartList.forEach((item) => {
       totalPrice += this.getSubtoal(item);
